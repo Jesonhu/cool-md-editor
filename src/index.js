@@ -1,10 +1,22 @@
 
 import domRender from './editor/editor-dom-render';
 import CONFIG from './editor/config';
-import {
-  toolbarBuiltInButtons
-} from './editor/editor-toolbar';
+
+// 工具图标功能
 import './style/index.scss';
+import {
+  toolbarBuiltInButtons,
+  insertTexts,
+  promptTexts,
+  blockStyles,
+  shortcuts,
+  bindings,
+} from './editor/editor-toolbar';
+
+// 功能函数
+import {
+  extend
+} from './plugins/Util';
 
 // codemirror =========================
 import Codemirror from 'codemirror';
@@ -83,13 +95,14 @@ domRender.init(document.getElementById('editor-wrap'))
 class MDEditor {
   constructor(options) {
     options = options || {};
-    options.parent = this;
+    options.editor = this;
 
-    this.getIconStyle();
+    this.createIconLink();
 
     // Find the element attr
     if (options.element) {
       this.element = options.element;
+      this.textAreaElement = options.element.getElementsByTagName('textarea')[0];
     } else if (options.element === null) {
       console.log('MDEditor: Error. No element was found.');
       return;
@@ -104,9 +117,9 @@ class MDEditor {
         if (toolbarBuiltInButtons.hasOwnProperty(key)) {
 
           // 分隔符功能
-          // if (key.indexOf('separator-') != -1) {
-          //   options.toolbar.push('|')
-          // }
+          if (key.indexOf('separator-') != -1) {
+            options.toolbar.push('|')
+          }
 
           // 
           if (toolbarBuiltInButtons[key].default === true || 
@@ -117,20 +130,111 @@ class MDEditor {
           }
         }
       }
+    }
 
-      // Handle status bar
-      if (!options.hasOwnProperty('status')) {
-        options.status = ['autosave', 'lines', 'words', 'cursor'];
+    // Handle status bar
+    if (!options.hasOwnProperty('status')) {
+      options.status = ['autosave', 'lines', 'words', 'cursor'];
+    }
+
+    // Add default preview rendering function
+    if (!options.previewRender) {
+      options.previewRender = function(plainText) {
+        return this.editor.markdown(plainText);
       }
+    }
+
+    // Set default options for parsing config
+    options.parsingConfig = extend(
+      { highlightFormatting: true },
+      options.parsingConfig || {}
+    );
+
+    // Merging the insertTexts, with the given options
+    options.insertTexts = extend({}, insertTexts, options.insertTexts || {});
+
+    // Merging the promptTexts, with the given options.
+    options.promptTexts = promptTexts;
+
+    // Merging the blockStyles, with the given options.
+    options.blockStyles = extend({}, blockStyles, options.blockStyles || {});
+
+    // Mergint the shortcuts, with the given options.
+    // 快捷键配置设置
+    options.shortcuts = extend({}, shortcuts, options.shortcuts || {});
+
+    // Update this options
+    this.options = options;
+
+    // Auto render
+    this.render();
+
+    // The codemirror commponent is only avaliable after rendered.
+    // so setter for the initialValue can only run after
+    // the element has ben renered
+    if (options.initialValue && (!this.options.autosave || this.options.autosave.foundSaveValue !== true)) {
+      this.value(options.initialValue);
     }
   }
 
-  getIconStyle() {
+  /**
+   * Render editor to the given element.
+   * @param {Element} el 
+   */
+  render(el) {
+    if (!el) {
+      el = this.textAreaElement || this.element.getElementsByTagName('textarea')[0];
+    }
+    
+  }
+
+  markdown(text) {
+    if (marked) {
+      const markedOptions = {
+        gfm: true,
+        tables: true,
+        breaks: false,
+        pedantic: false,
+        sanitize: false,
+        smartLists: true,
+        smartypants: false,
+        highlight: function(code) {
+          return hljs.highlightAuto(code).value;
+        }
+      }
+
+      // Set options
+      marked.setOptions(markedOptions);
+
+      // Return
+      return marked(text);
+    }
+  }
+
+  /** 添加图标样式链接 */
+  createIconLink() {
     const { iconLink } = CONFIG;
     const link = document.createElement('link');
+
+    // 避免多次生成
+    if (this.options.isCreatedIconLink) return;
+
     link.rel = 'stylesheet';
     link.href = iconLink;
     document.getElementsByTagName('head')[0].appendChild(link);
+    this.options.isCreatedIconLink = true;
+  }
+
+  /** 
+   * Get or set the text content.
+   */
+  value(value) {
+    if (value === undefined) {
+      return this.codemirror.getValue();
+    } else {
+      this.codemirror.getDoc().setValue(value);
+      return this;
+    }
   }
 }
 

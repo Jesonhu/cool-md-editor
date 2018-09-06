@@ -203,10 +203,56 @@ const toolbarBuiltInButtons = {
 
 }
 
+/** 格式 */
+const insertTexts = {
+  link: ["[", "](#url#)"],
+	image: ["![](", "#url#)"],
+	table: ["", "\n\n| Column 1 | Column 2 | Column 3 |\n| -------- | -------- | -------- |\n| Text     | Text     | Text     |\n\n"],
+	horizontalRule: ["", "\n\n-----\n\n"]
+}
+
+const promptTexts = {
+	link: "URL for the link:",
+	image: "URL of the image:"
+}
+
+const blockStyles = {
+  "bold": "**",
+	"code": "```",
+	"italic": "*"
+}
+
+/** 快捷键 */
+const shortcuts = {
+  "toggleBold": "Cmd-B",
+	"toggleItalic": "Cmd-I",
+	"drawLink": "Cmd-K",
+	"toggleHeadingSmaller": "Cmd-H",
+	"toggleHeadingBigger": "Shift-Cmd-H",
+	"cleanBlock": "Cmd-E",
+	"drawImage": "Cmd-Alt-I",
+	"toggleBlockquote": "Cmd-'",
+	"toggleOrderedList": "Cmd-Alt-L",
+	"toggleUnorderedList": "Cmd-L",
+	"toggleCodeBlock": "Cmd-Alt-C",
+	"togglePreview": "Cmd-P",
+	"toggleSideBySide": "F9",
+	"toggleFullScreen": "F11"
+}
+
+
 export default {
   bindings,
 
   toolbarBuiltInButtons,
+
+  insertTexts,
+
+  promptTexts,
+
+  blockStyles,
+
+  shortcuts,
 
   toggleBold,
   toggleItalic,
