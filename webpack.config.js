@@ -32,9 +32,9 @@ module.exports = {
       template: "./src/index.html",
       filename: "./index.html"
     }),
-    new OptimizeCss({
-      cssProcessor: require('cssnano')
-    }),
+    // new OptimizeCss({
+    //   cssProcessor: require('cssnano')
+    // }),
     new MiniCssExtractPlugin({
       path: path.resolve(__dirname, 'dist'),
       // filename: "[name].[chunkhash:8].css",

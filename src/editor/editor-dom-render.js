@@ -16,6 +16,12 @@ const domRender = {
       })
       .catch(error => error);
     });
+
+    // better way but must think browser support
+    // await this.renderTools(parent);
+    // await this.renderCode(parent);
+    // await this.renderPriview(parent);
+    // await this.renderStatus(parent);
   },
   renderTools(parent) {
     return new Promise((resolve, reject) => {
