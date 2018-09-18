@@ -6,7 +6,6 @@
 + [ ] 快捷图标操作
 + [ ] 快捷截图粘贴
 
-
 ### 编译
 ```bash
 # webpck --mode=development
