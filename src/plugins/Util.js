@@ -36,7 +36,9 @@ const Util = {
     }
 
     return target;
-  }
+  },
+
+  isMac: /Mac/.test(navigator.platform)
 }
 
 export default Util;
