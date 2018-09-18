@@ -100,8 +100,8 @@ const openFullScreen = (editor) => {
 
 
 
- // Mapping of actions that can be bound to keyboard shortcuts or toolbar buttons
- // 绑定函数名
+// Mapping of actions that can be bound to keyboard shortcuts or toolbar buttons
+// 绑定函数名
 const bindings = {
   'toggleBold': toggleBold,
   'toggleItalic': toggleItalic,
@@ -265,7 +265,6 @@ const fixShortcut = (name) => {
   return name;
 }
 
-
 export default {
   bindings,
 
@@ -280,7 +279,6 @@ export default {
   shortcuts,
 
   fixShortcut,
-
   toggleBold,
   toggleItalic,
   openEdit,

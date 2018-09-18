@@ -187,7 +187,7 @@ class MDEditor {
     if (!el) {
       el = this.textAreaElement || this.element.getElementsByTagName('textarea')[0];
     }
-    
+
     const options = this.options;
     const editor = this;
     const keyMaps = {};
