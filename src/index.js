@@ -11,6 +11,8 @@ import {
   blockStyles,
   shortcuts,
   bindings,
+  fixShortcut,
+  toggleFullScreen
 } from './editor/editor-toolbar';
 
 // 功能函数
@@ -186,6 +188,99 @@ class MDEditor {
       el = this.textAreaElement || this.element.getElementsByTagName('textarea')[0];
     }
     
+    const options = this.options;
+    const editor = this;
+    const keyMaps = {};
+
+    for (let key in options.shortcuts) {
+      if (options.shortcuts[key] !== null && bindings[key] !== null) {
+        (function(key) {
+          keyMaps[fixShortcut(options.shortcuts[key])] = () => {
+            bindings[key](editor);
+          }
+        })(key);
+      }
+    }
+
+    // 增加操作快捷键
+    keyMaps['Enter'] = 'newlineAndIndentContinueMarkdownList';
+    keyMaps['Tab'] = 'tabAndIndentMarkdownList';
+    keyMaps['Esc'] = (cm) => {
+      if (cm.getOptions('fullScreen')) toggleFullScreen(editor);
+    }
+
+    document.addEventListener('keydown', (e) => {
+      e = e || window.event;
+
+      if (e.keyCode == 27) {
+        if (editor.codemirror.getOptions('fullScreen')) toggleFullScreen(editor);
+      }
+    }, false);
+
+    let mode;
+    let backdrop;
+    if (options.spellCheckder !== false) {
+      mode = 'spell-checker';
+      backdrop = options.parsingConfig;
+      backdrop.name = 'gfm';
+      backdrop.gitHubSpice = false;
+    } else {
+      mode = options.parsingConfig;
+      mode.name = 'gfm';
+      mode.gitHubSpice = false;
+    }
+
+    const cmDiyConfig = {
+      mode: {
+        name: "gfm",
+        tokenTypeOverrides: {
+          emoji: "emoji"
+        }
+      },
+      /** 显示行号 */
+      lineNumbers: true,
+      // 自动验证错误
+      matchBrackets: true,
+      // 缩进
+      indentUnit: 4,
+      // 是否换行
+      lineWrapping: true,
+      // 点击高亮正行
+      styleActiveLine: true,
+      // 配色(主题)
+      theme: "base16-dark",
+      // 自动补全括号
+      autoCloseBrackets: true,
+      // 自动闭合标签
+      autoCloseTags: true,
+      // 展开折叠
+      foldGutter: true,
+      gutters: ["CodeMirror-linenumbers", "CodeMirror-foldgutter"]
+    }
+
+    // 编辑器默认设置
+    // 实例化编辑器时默认的传参
+    const editorDefaultConfig = {
+      mode: mode,
+      backdrop: backdrop,
+      theme: "paper",
+      tabSize: (options.tabSize != undefined) ? options.tabSize : 2,
+      indentUnit: (options.tabSize != undefined) ? options.tabSize : 2,
+      indentWithTabs: (options.indentWithTabs === false) ? false : true,
+      lineNumbers: false,
+      autofocus: (options.autofocus === true) ? true : false,
+      extraKeys: keyMaps,
+      lineWrapping: (options.lineWrapping === false) ? false : true,
+      allowDropFileTypes: ["text/plain"],
+      placeholder: options.placeholder || el.getAttribute("placeholder") || "",
+      styleSelectedText: (options.styleSelectedText != undefined) ? options.styleSelectedText : true
+    }
+
+    // 参数混合
+    Object.assign(editorDefaultConfig, cmDiyConfig);
+
+    // `el` 表示 `textArea`
+    this.codemirror = CodeMirror.fromTextArea(el, cmDiyConfig);
   }
 
   markdown(text) {

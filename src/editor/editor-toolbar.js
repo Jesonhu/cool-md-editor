@@ -1,3 +1,6 @@
+import {
+  isMac
+} from '../plugins/Util';
 /**
  * 工具栏功能
  */
@@ -98,13 +101,21 @@ const openFullScreen = (editor) => {
 
 
  // Mapping of actions that can be bound to keyboard shortcuts or toolbar buttons
+ // 绑定函数名
 const bindings = {
   'toggleBold': toggleBold,
-  'italic': toggleItalic,
-  'edit': openEdit,
-  'compare': openCompare,
-  'preview': openPreview,
-  'fullscreen': openFullScreen
+  'toggleItalic': toggleItalic,
+  'toggleHeading': toggleHeading,
+  'toggleBlockquote': toggleBlockquote,
+  'toggleCodeBlock': toggleCodeBlock,
+  'toggleUnorderedList': toggleUnorderedList,
+  'toggleOrderedList': toggleOrderedList,
+  'drawImage': drawImage,
+  'drawLink': drawLink,
+  'openEdit': openEdit,
+  'openCompare': openCompare,
+  'openPreview': openPreview,
+  'openFullScreen': openFullScreen
 }
 
 // 按钮定义
@@ -240,6 +251,20 @@ const shortcuts = {
 	"toggleFullScreen": "F11"
 }
 
+/**
+ * 快捷键针对不同系统做兼容处理.
+ * @param {objet} name 
+ * @desc win: Ctrl; mac: Cmd
+ */
+const fixShortcut = (name) => {
+  if (isMac) {
+    name = name.replace('Ctrl', 'Cmd');
+  } else {
+    name = name.replace('Cmd', 'Ctrl');
+  }
+  return name;
+}
+
 
 export default {
   bindings,
@@ -253,6 +278,8 @@ export default {
   blockStyles,
 
   shortcuts,
+
+  fixShortcut,
 
   toggleBold,
   toggleItalic,
