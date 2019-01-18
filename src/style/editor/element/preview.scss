@@ -1,0 +1,33 @@
+//========================================
+// 编辑器 `预览容器` 样式.
+//
+// @update 2019/1/18
+// @author Jesonhu(github)
+// @email jesonhu_web@163.com
+//========================================
+
+// 公共样式
+.cool-md-editor-wrap {
+  .editor-preview {
+    padding-left:5px;
+    height: 100%;
+    overflow: hidden;
+    overflow-y: scroll;
+  }
+}
+
+// `圣光主题`
+.editor-theme-light {
+  .editor-preview {
+    .preview-bd {
+      background-color:#fff;
+    }
+  }
+}
+
+// `暗黑主题`
+.editor-theme-dark {
+  .editor-preview {
+    background-color:#fff;
+  }
+}

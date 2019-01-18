@@ -26,7 +26,7 @@ const domRender = {
   renderTools(parent) {
     return new Promise((resolve, reject) => {
       parent.innerHTML += `
-      <div class="editor-tool"></div>
+      <div class="editor-tools"></div>
       ` 
       resolve();
     });
@@ -34,7 +34,7 @@ const domRender = {
   renderCode(parent) {
     return new Promise((resolve, reject) => {
       parent.innerHTML += `
-        <div class="editor-code">
+        <div class="editor-md">
         <form>
           <textArea id="area"></textArea>
         </form>
@@ -47,7 +47,34 @@ const domRender = {
   renderPriview(parent) {
     return new Promise((resolve, reject) => {
       parent.innerHTML += `
-      <div class="editor-preview"></div>
+      <div class="editor-preview">
+        <div class="preview-bd">
+          1<br>
+          1<br>
+          1<br>
+          1<br>
+          1<br>
+          1<br>
+          1<br>
+          1<br>
+          1<br>
+          1<br>
+          1<br>
+          1<br>
+          1<br>
+          1<br>
+          1<br>
+          1<br>
+          1<br>
+          1<br>
+          1<br>
+          1<br>
+          1<br>
+          1<br>
+          1<br>
+          1<br>
+        </div>
+      </div>
       `;
       resolve();
     });

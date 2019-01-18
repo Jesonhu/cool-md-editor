@@ -9,13 +9,13 @@ const config = {
       /** 亮色主题 */
       themeLight: 'editor-theme-light',
       /** 全屏 */
-      fullscreen: 'fullscreen',
+      fullscreen: 'editor-status_fullscreen',
       /** 对比预览 */
-      compare: 'show-all',
+      compare: 'editor-status_show-all',
       /** 仅编辑 */
-      edit: 'only-markdown',
+      edit: 'editor-status_only-edit',
       /** 仅看预览 */
-      preview: 'only-preview',
+      preview: 'editor-status_only-preview',
     },
     theme: {
       dark: {

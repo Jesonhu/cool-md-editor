@@ -1,5 +1,5 @@
 
-import domRender from './editor/editor-dom-render';
+import domRender from './editor/createElement';
 import CONFIG from './editor/config';
 
 // 工具图标功能
@@ -18,7 +18,7 @@ import {
 // 功能函数
 import {
   extend
-} from './plugins/Util';
+} from './util/Util';
 
 // codemirror =========================
 import Codemirror from 'codemirror';

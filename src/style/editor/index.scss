@@ -1,0 +1,79 @@
+// element
+@import './element/tools.scss';
+@import './element/md.scss';
+@import './element/preview.scss';
+@import './element/status.scss';
+
+.cool-md-editor-wrap {
+  display:flex;
+  position: relative;
+  width:100%;
+  height:100%;
+  padding-top:50px;
+  padding-bottom:30px;
+  border-radius:3px;
+  font-size:16px;
+  border-left:1px solid transparent;
+  border-right:1px solid transparent;
+  .editor-md,
+  .editor-preview {
+    flex:1;
+    height: 100%;
+  }
+  
+  /* 全屏状态下 start */
+  &.fullscreen {
+    position: fixed;
+    width:100%;
+    height: 100%;
+    top:0;
+    left:0;
+    margin:0;
+    z-index: 9999;
+  }
+  /* 全屏状态下 end */
+
+  /* 代码和预览都显示 start */
+  &.show-all {
+    .editor-code,
+    .editor-preview {
+      display:block;
+    }
+  }
+  /* 代码和预览都显示 end */
+
+  /* 只显示 markdown start */
+  &.only-markdown {
+    .editor-code {
+      display:block;
+    }
+    .editor-preview {
+      display:none;
+    }
+  }
+  /* 只显示 markdown end */
+
+  /* 只显示预览 start */
+  &.only-preview {
+    .editor-code {
+      display:none;
+    }
+    .editor-preview {
+      display:none;
+    }
+  }
+  /* 只显示预览 start */
+
+  /* 主题 start */
+  // `圣光` 主题
+  &.editor-theme-light {
+    border-left-color:$themeLight;
+    border-right-color:$themeLight;
+  }
+  // `暗黑` 主题
+  &.editor-theme-dark {
+    border-left-color:$themeDark;
+    border-right-color:$themeDark;
+  }
+  /* 主题 end */
+}

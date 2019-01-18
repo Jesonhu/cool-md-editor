@@ -1,13 +1,21 @@
-/*
 
-    Name:       Base16 Default Light
-    Author:     Chris Kempson (http://chriskempson.com)
+//========================================
+// 编辑器圣光主题.
+// @update 2019/1/18
+// @author Jesonhu(github)
+// @email jesonhu_web@163.com
+//========================================
 
-    CodeMirror template by Jan T. Sott (https://github.com/idleberg/base16-codemirror)
-    Original Base16 color scheme by Chris Kempson (https://github.com/chriskempson/base16)
-
-*/
 .editor-theme-light {
+    /*
+
+        Name:       Base16 Default Light
+        Author:     Chris Kempson (http://chriskempson.com)
+
+        CodeMirror template by Jan T. Sott (https://github.com/idleberg/base16-codemirror)
+        Original Base16 color scheme by Chris Kempson (https://github.com/chriskempson/base16)
+
+    */
     .cm-s-base16-light.CodeMirror { background: #f5f5f5; color: #202020; }
     .cm-s-base16-light div.CodeMirror-selected { background: #e0e0e0; }
     .cm-s-base16-light .CodeMirror-line::selection, .cm-s-base16-light .CodeMirror-line > span::selection, .cm-s-base16-light .CodeMirror-line > span > span::selection { background: #e0e0e0; }

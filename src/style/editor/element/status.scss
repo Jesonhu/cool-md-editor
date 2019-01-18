@@ -1,0 +1,32 @@
+//========================================
+// 编辑器 `状态条` 样式.
+//
+// @update 2019/1/18
+// @author Jesonhu(github)
+// @email jesonhu_web@163.com
+//========================================
+
+// 公共样式
+.cool-md-editor-wrap {
+  .editor-status {
+    position: absolute;
+    left:0;
+    bottom:0;
+    width:100%;
+    height: 30px;
+  }
+}
+
+// `圣光主题`
+.editor-theme-light {
+  .editor-status {
+    background-color:$themeLight;
+  }
+}
+
+// `暗黑主题`
+.editor-theme-dark {
+  .editor-status {
+    background-color:$themeDark;
+  }
+}

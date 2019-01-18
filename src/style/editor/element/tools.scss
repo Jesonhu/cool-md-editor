@@ -1,0 +1,31 @@
+//========================================
+// 编辑器 `工具条` 样式.
+//
+// @update 2019/1/18
+// @author Jesonhu(github)
+// @email jesonhu_web@163.com
+//========================================
+
+.cool-md-editor-wrap {
+  .editor-tools {
+    position: absolute;
+    left:0;
+    top:0;
+    width:100%;
+    height: 50px;
+  }
+}
+
+// `圣光主题`
+.editor-theme-light {
+  .editor-tools {
+    background-color:$themeLight;
+  }
+}
+
+// `暗黑主题`
+.editor-theme-dark {
+  .editor-tools {
+    background-color:$themeDark;
+  }
+}
