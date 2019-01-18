@@ -13,6 +13,8 @@ const path = require('path');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const HtmlWebPackPlugin = require("html-webpack-plugin");
 const OptimizeCss = require('optimize-css-assets-webpack-plugin');
+const CleanWebpackPlugin = require('clean-webpack-plugin');;
+
 
 module.exports = {
   mode: 'development',
@@ -27,7 +29,14 @@ module.exports = {
     // globalObject: "this"        
   },
 
+  devtool: 'inline-source-map',
+
+  devServer: {
+    contentBase: './dist'
+  },
+
   plugins: [
+    new CleanWebpackPlugin(['dist']),
     new HtmlWebPackPlugin({
       template: "./src/index.html",
       filename: "./index.html"

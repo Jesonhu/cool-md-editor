@@ -1,6 +1,6 @@
 import {
   isMac
-} from '../plugins/Util';
+} from '../util/Util';
 /**
  * 工具栏功能
  */
