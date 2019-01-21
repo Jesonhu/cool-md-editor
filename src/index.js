@@ -21,6 +21,9 @@ import {
   extend
 } from './util/Util';
 
+/** 工具集合对象.  */
+import UTIL from './util/Util';
+
 // codemirror =========================
 import Codemirror from 'codemirror';
 import 'codemirror/mode/markdown/markdown';
@@ -107,8 +110,9 @@ class CoolMDEditor {
   init(options) {
     this._options = options;
     this._options.$tools = $tools;
+    this.initData(options);
     this.initView(options);
-    // this.initData(options);
+    this.init
   }
   // 设置 config
   set options(option) {
@@ -120,95 +124,103 @@ class CoolMDEditor {
   /**
    * 初始化编辑器数据. 
    */
-  initData(options) {
-    // Find the element attr
-    if (options.element) {
-      this.element = options.element;
-      this.textAreaElement = options.element.getElementsByTagName('textarea')[0];
-    } else if (options.element === null) {
-      console.log('MDEditor: Error. No element was found.');
-      return;
-    }
+  // initData(options) {
+  //   // Find the element attr
+  //   if (options.element) {
+  //     this.element = options.element;
+  //     this.textAreaElement = options.element.getElementsByTagName('textarea')[0];
+  //   } else if (options.element === null) {
+  //     console.log('MDEditor: Error. No element was found.');
+  //     return;
+  //   }
 
-    // Handle toolbar
-    if (options.toolbar === undefined) {
-      options.toolbar = [];
+  //   // Handle toolbar
+  //   if (options.toolbar === undefined) {
+  //     options.toolbar = [];
 
-      // Loop over the built in buttons, to get the preferred order
-      for (let key in toolbarBuiltInButtons) {
-        if (toolbarBuiltInButtons.hasOwnProperty(key)) {
+  //     // Loop over the built in buttons, to get the preferred order
+  //     for (let key in toolbarBuiltInButtons) {
+  //       if (toolbarBuiltInButtons.hasOwnProperty(key)) {
 
-          // 分隔符功能
-          if (key.indexOf('separator-') != -1) {
-            options.toolbar.push('|')
-          }
+  //         // 分隔符功能
+  //         if (key.indexOf('separator-') != -1) {
+  //           options.toolbar.push('|')
+  //         }
 
-          // 
-          if (toolbarBuiltInButtons[key].default === true || 
-             (options.showIcons && 
-              options.showIcons.construtor === Array && 
-              options.showIcons.indexOf(key) != -1)) {
-            options.toolbar.push(key);    
-          }
-        }
-      }
-    }
+  //         // 
+  //         if (toolbarBuiltInButtons[key].default === true || 
+  //            (options.showIcons && 
+  //             options.showIcons.construtor === Array && 
+  //             options.showIcons.indexOf(key) != -1)) {
+  //           options.toolbar.push(key);    
+  //         }
+  //       }
+  //     }
+  //   }
 
-    // Handle status bar
-    if (!options.hasOwnProperty('status')) {
-      options.status = ['autosave', 'lines', 'words', 'cursor'];
-    }
+  //   // Handle status bar
+  //   if (!options.hasOwnProperty('status')) {
+  //     options.status = ['autosave', 'lines', 'words', 'cursor'];
+  //   }
 
-    // Add default preview rendering function
-    if (!options.previewRender) {
-      options.previewRender = function(plainText) {
-        return this.editor.markdown(plainText);
-      }
-    }
+  //   // Add default preview rendering function
+  //   if (!options.previewRender) {
+  //     options.previewRender = function(plainText) {
+  //       return this.editor.markdown(plainText);
+  //     }
+  //   }
 
-    // Set default options for parsing config
-    options.parsingConfig = extend(
-      { highlightFormatting: true },
-      options.parsingConfig || {}
-    );
+  //   // Set default options for parsing config
+  //   options.parsingConfig = extend(
+  //     { highlightFormatting: true },
+  //     options.parsingConfig || {}
+  //   );
 
-    // Merging the insertTexts, with the given options
-    options.insertTexts = extend({}, insertTexts, options.insertTexts || {});
+  //   // Merging the insertTexts, with the given options
+  //   options.insertTexts = extend({}, insertTexts, options.insertTexts || {});
 
-    // Merging the promptTexts, with the given options.
-    options.promptTexts = promptTexts;
+  //   // Merging the promptTexts, with the given options.
+  //   options.promptTexts = promptTexts;
 
-    // Merging the blockStyles, with the given options.
-    options.blockStyles = extend({}, blockStyles, options.blockStyles || {});
+  //   // Merging the blockStyles, with the given options.
+  //   options.blockStyles = extend({}, blockStyles, options.blockStyles || {});
 
-    // Mergint the shortcuts, with the given options.
-    // 快捷键配置设置
-    options.shortcuts = extend({}, shortcuts, options.shortcuts || {});
+  //   // Mergint the shortcuts, with the given options.
+  //   // 快捷键配置设置
+  //   options.shortcuts = extend({}, shortcuts, options.shortcuts || {});
 
-    // Update this options
-    this.options = options;
+  //   // Update this options
+  //   this.options = options;
 
-    // The codemirror commponent is only avaliable after rendered.
-    // so setter for the initialValue can only run after
-    // the element has ben renered
-    if (options.initialValue && (!this.options.autosave || this.options.autosave.foundSaveValue !== true)) {
-      this.value(options.initialValue);
-    }
+  //   // The codemirror commponent is only avaliable after rendered.
+  //   // so setter for the initialValue can only run after
+  //   // the element has ben renered
+  //   if (options.initialValue && (!this.options.autosave || this.options.autosave.foundSaveValue !== true)) {
+  //     this.value(options.initialValue);
+  //   }
+  // }
+  initData() {
+    this.initEditorStatus();
   }
   /**
    * 初始编辑器化视图显示. 
    */
   initView(options) {
+    const self = this;
     this.createIconLink();
-    this.createElement(options);
+    this.createElement(options)
+      .then(() => {
+        self.initEvent();
+      });
   }
 
   /**
    * 初始化`编辑器`事件处理. 
    */
   initEvent() {
-
+    this.initStatusEvent();
   }
+  // 创建编辑器元素 start ====================================
   /**
    * 编辑器 `图标css链接` 元素创建.
    */
@@ -235,10 +247,59 @@ class CoolMDEditor {
    * 创建编辑器 `显示容器`. 
    */
   createElement(options) {
-    domRender.init(options).then(() => {
-      Codemirror.fromTextArea(document.getElementById('area'), codemirror.config);
+    return new Promise((resolve, reject) => {
+      domRender.init(options).then(() => {
+        Codemirror.fromTextArea(document.getElementById('area'), codemirror.config);
+        resolve();
+      });
     });
   }
+  // 创建编辑器元素 end ====================================
+
+  // 编辑器初始状态设置 start ====================================
+  initEditorStatus(options) {
+    // 主题设置.
+    this.$status = {};
+    this.$status['isThemeLight'] = true;
+    this.$status['isFullscreen'] = false;
+  }
+  // 编辑器初始状态设置 end ====================================
+
+  // 编辑器事件处理 start ====================================
+  /**
+   * 状态条，换皮肤. 
+   */
+  initStatusEvent() {
+    this.initEventToggleTheme();
+  }
+  /**
+   * 换肤功能添加. 
+   */
+  initEventToggleTheme(options, className = '.icon-theme') {
+    const self = this;
+    const oThemeEl = this._options.el.querySelector('.editor-status').querySelector(className);
+    const el = this._options.el;
+    const { addClass, removeClass } = UTIL;
+
+    if (oThemeEl) {
+      let isThemeLight;
+      oThemeEl.addEventListener('click', () => {
+        isThemeLight = self.$status['isThemeLight'];
+        // 当前 `圣光样式` ==> 切换到 `暗黑样式`
+        if (isThemeLight) {
+          addClass(el, 'editor-theme-dark');
+          removeClass(el, 'editor-theme-light');
+        } else {
+          addClass(el, 'editor-theme-light');
+          removeClass(el, 'editor-theme-dark');
+        }
+        self.$status['isThemeLight'] = !self.$status['isThemeLight'];
+      });
+    }
+  }
+  initEventToggleFullscreen(options) {
+  }
+  // 编辑器事件处理 end ====================================
 
   /**
    * Render editor to the given element.

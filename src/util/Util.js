@@ -38,7 +38,35 @@ const Util = {
     return target;
   },
 
-  isMac: /Mac/.test(navigator.platform)
+  isMac: /Mac/.test(navigator.platform),
+
+  /**
+   * 元素样式切换. 
+   */
+  toggleClass(el, className) {
+
+  },
+
+  /**
+   * 元素样式增加. 
+   */
+  addClass(el, className) {
+    if (typeof el !== 'object') return;
+    const isExist = el.classList.contains(className);
+    if (!isExist) {
+      el.classList.add(className);
+    }
+  },
+  /**
+   * 元素样式删除. 
+   */
+  removeClass(el, className) {
+    if (typeof el !== 'object') return;
+    const isExist = el.classList.contains(className);
+    if (isExist) {
+      el.classList.remove(className);
+    }
+  }
 }
 
 export default Util;
