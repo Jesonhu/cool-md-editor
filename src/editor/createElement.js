@@ -4,13 +4,13 @@ const domRender = {
     return new Promise((resolve, reject) => {
       this.renderTools(options)
       .then(() => {
-        this.renderCode(el);
+        this.renderCode(options);
       })
       .then(() => {
-        this.renderPriview(el);
+        this.renderPriview(options);
       })
       .then(() => {
-        this.renderStatus(el);
+        this.renderStatus(options);
       })
       .then(() => {
         resolve();
@@ -137,9 +137,10 @@ const domRender = {
     return `<span class="${config.className}" title="${config.title}"></span>`;
   },
   // 创建 Edit Tools end =========================
-  renderCode(parent) {
+  renderCode(options) {
+    const el = options.el;
     return new Promise((resolve, reject) => {
-      parent.innerHTML += `
+      el.innerHTML += `
         <div class="editor-md">
         <form>
           <textArea id="area"></textArea>
@@ -150,9 +151,10 @@ const domRender = {
     })
     
   },
-  renderPriview(parent) {
+  renderPriview(options) {
+    const el = options.el;
     return new Promise((resolve, reject) => {
-      parent.innerHTML += `
+      el.innerHTML += `
       <div class="editor-preview">
         <div class="preview-bd">
         </div>
@@ -161,14 +163,35 @@ const domRender = {
       resolve();
     });
   },
-  renderStatus(parent) {
+  // 创建 Edit Status start =========================
+  renderStatus(options) {
+    const el = options.el;
+
+    const positonHtmlStr = this.createStatusPosition();
+    const lengthHtmlStr = this.createStatusLens();
     return new Promise((resolve, reject) => {
-      parent.innerHTML += `
-      <div class="editor-status"></div>
-      `;
+      el.innerHTML += `
+      <div class="editor-status">${positonHtmlStr}${lengthHtmlStr}</div>`;
       resolve();
     })
+  },
+  createStatusPosition(options) {
+    const toggleThemeHtmlStr = this.createStatusToggleTheme();
+    let htmlStr = `<div class="editor-status-positon"><span>Line 53,Columns 1 一 233 Lines</span>${toggleThemeHtmlStr}</div>`;
+
+    return htmlStr;
+  },
+  createStatusToggleTheme() {
+    let htmlStr = '<span class="icon-theme"></span>';
+
+    return htmlStr;
+  },
+  createStatusLens() {
+    let htmlStr = '<div class="editor-status-length">Length 15316</div>';
+
+    return htmlStr;
   }
+  // 创建 Edit Status end =========================
 }
 
 export default domRender;

@@ -14,6 +14,31 @@
     bottom:0;
     width:100%;
     height: 30px;
+    display:flex;
+    line-height: 30px;
+    align-items: center;
+    padding: 0 10px;
+
+    .editor-status-positon {
+      width: 80%;
+      display: flex;
+      flex-wrap: nowrap;
+      justify-content: space-between;
+      padding-right: 10px;
+
+      .icon-theme {
+        width: 45px;
+        text-align: center;
+        box-sizing: border-box;
+        border-left: 1px solid transparent;
+        border-right: 1px solid transparent;
+        cursor: pointer;
+      }
+    }
+    
+    .editor-status-length {
+      width: 20%;
+    }
   }
 }
 
@@ -21,6 +46,13 @@
 .editor-theme-light {
   .editor-status {
     background-color:$themeLight;
+
+    .editor-status-positon {
+      .icon-theme {
+        border-left-color: #333;
+        border-right-color: #333;
+      }
+    }
   }
 }
 
