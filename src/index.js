@@ -4,16 +4,17 @@ import CONFIG from './editor/config';
 
 // 工具图标功能
 import './style/index.scss';
-import {
-  toolbarBuiltInButtons,
-  insertTexts,
-  promptTexts,
-  blockStyles,
-  shortcuts,
-  bindings,
-  fixShortcut,
-  toggleFullScreen
-} from './editor/editor-toolbar-event';
+// import {
+//   toolbarBuiltInButtons,
+//   insertTexts,
+//   promptTexts,
+//   blockStyles,
+//   shortcuts,
+//   bindings,
+//   fixShortcut,
+//   toggleFullScreen
+// } from './editor/toolbar-event';
+import $tools from './editor/toolbar-event';
 
 // 功能函数
 import {
@@ -104,9 +105,10 @@ class CoolMDEditor {
    * 初始化. 
    */
   init(options) {
+    this._options = options;
+    this._options.$tools = $tools;
     this.initView(options);
     // this.initData(options);
-    this._options = options;
   }
   // 设置 config
   set options(option) {

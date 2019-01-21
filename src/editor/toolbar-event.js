@@ -123,93 +123,119 @@ const toolbarBuiltInButtons = {
   'bold': {
     name: 'bold',
     action: toggleBold,
-    className: 'icon icon-bold',
+    className: 'icon-bold',
     title: 'Bold',
-    default: true
+    default: true,
+    index: 0,
+    isEditTools: true
   },
   'italic': {
     name: 'italic',
     action: toggleItalic,
-    className: 'icon icon-italic',
+    className: 'icon-italic',
     title: 'Italic',
-    default: true
+    default: true,
+    index: 1,
+    isEditTools: true
   },
   'heading': {
     name: 'heading',
     action: toggleHeading,
-    className: 'icon icon-heading',
+    className: 'icon-heading',
     title: 'Heading',
-    default: true
+    default: true,
+    index: 2,
+    isEditTools: true
   },
   'quote': {
     name: 'quote',
     action: toggleBlockquote,
-    className: 'icon quotation-marks',
+    className: 'icon-quotation-marks',
     title: 'Quote',
-    default: true
+    default: true,
+    index: 3,
+    isEditTools: true
   },
   'code': {
     name: 'code',
     action: toggleCodeBlock,
-    className: 'icon icon-code',
+    className: 'icon-code',
     title: 'Code',
-    default: true
+    default: true,
+    index: 4,
+    isEditTools: true
   },
   'unordered-list': {
     name: 'unordered-list',
-    clasName: 'icon icon-Listofissues',
+    className: 'icon-Listofissues',
     action: toggleUnorderedList,
     title: 'Generic List',
-    default: true
+    default: true,
+    index: 5,
+    isEditTools: true
   },
   'ordered-list': {
     name: 'ordered-list',
-    className: 'icon icon-list',
+    className: 'icon-list',
     action: toggleOrderedList,
     title: 'Number List',
-    default: true
+    default: true,
+    index: 6,
+    isEditTools: true
   },
   'link': {
     name: 'link',
-    clasName: 'icon icon-link',
+    className: 'icon-link',
     action: drawLink,
     title: 'Insert Link',
-    default: true
+    default: true,
+    index: 7,
+    isEditTools: true
   },
   'image': {
     name: 'image',
-    className: 'icon icon-img',
+    className: 'icon-img',
     action: drawImage,
     title: 'Insert Image',
-    default: true
+    default: true,
+    index: 8,
+    isEditTools: true
   },
   'edit': {
     name: 'edit',
-    className: 'icon icon-pen',
+    className: 'icon-pen',
     action: openEdit,
     title: 'Toggle Edit',
-    default: true
+    default: true,
+    index: 0,
+    isEditTools: false
   },
   'compare': {
     name: 'compare',
-    className: 'icon icon-columns',
+    className: 'icon-columns',
     action: openCompare,
     title: 'Toggle Compare',
-    default: true
+    default: true,
+    index: 1,
+    isEditTools: false
   },
   'preview': {
     name: 'preview',
-    className: 'icon icon-eye',
+    className: 'icon-eye',
     action: openPreview,
     title: 'Toggle Preview',
-    default: true
+    default: true,
+    index: 2,
+    isEditTools: false
   },
   'fullscreen': {
     name: 'fullscreen',
-    className: 'icon icon-full-screen',
+    className: 'icon-full-screen',
     action: openFullScreen,
     title: 'Toggle Fullscreen',
-    default: true
+    default: true,
+    index: 3,
+    isEditTools: false
   }
 
 }

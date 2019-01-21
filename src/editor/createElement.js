@@ -2,7 +2,7 @@ const domRender = {
   init(options) {
     const el = options.el;
     return new Promise((resolve, reject) => {
-      this.renderTools(el)
+      this.renderTools(options)
       .then(() => {
         this.renderCode(el);
       })
@@ -24,53 +24,63 @@ const domRender = {
     // await this.renderPriview(parent);
     // await this.renderStatus(parent);
   },
-  renderTools(parent) {
-    const slef = this;
-    const toolsHandleHtmlStr = this.createToolsHandle();
+  // 创建 Edit Tools start =========================
+  renderTools(options) {
+    const el = options.el;
+    const { toolbarBuiltInButtons } = options.$tools;
+    const toolsMainHtmlStr = this.createToolsMain(toolbarBuiltInButtons);
+    const toolsHandleHtmlStr = this.createToolsHandle(toolbarBuiltInButtons);
     return new Promise((resolve, reject) => {
-
-      parent.innerHTML += `
-        <div class="editor-tools">${toolsHandleHtmlStr}</div>
+      el.innerHTML += `
+        <div class="editor-tools">${toolsMainHtmlStr}${toolsHandleHtmlStr}</div>
       `;
       resolve();
     });
   },
   /**
-   * 创建工具条 `编辑图标`. 
+   * 创建工具条 `编辑工具图标`. 
    */
-  createToolsMain() {
+  createToolsMain(icons) {
+    const self = this;
+    const toolsEdit = this.getToolsEdit(icons);
+    let htmlStr = '<div class="editor-tools-main">';
 
+    // 循环创建图标
+    if (toolsEdit.length > 0) {
+      toolsEdit.forEach(item => {
+        htmlStr += self.createToolsItem(item);
+      });
+    }
+    
+
+    htmlStr += '</div>';
+
+    return htmlStr;
+  },
+  /**
+   * 获取 `工具条：编辑图标`. 
+   * 
+   * @desc 工具条图标按照编辑功能分为：`编辑图标`、`视图图标` 通过 `isEditTools`是否为 `true` 标记
+   */
+  getToolsEdit(iconsOption) {
+    if (typeof iconsOption !== 'object') return;
+
+    const resultObj = {};
+    let _options = JSON.parse(JSON.stringify(iconsOption));
+    for (let key in _options) {
+      if (_options[key]['isEditTools']) {
+        resultObj[key] = _options[key];
+      }
+    }
+    const sortEditToolsArr = this.sortToolsIcon(resultObj, 'index');
+
+    return sortEditToolsArr;
   },
   /**
    * 创建工具条 `视图操作图标`. 
    */
   createToolsHandle(icons) {
-    const _icons = [
-      {
-        name: 'edit',
-        className: 'icon-pen',
-        title: 'Toggle Edit',
-        default: true
-      },
-      {
-        name: 'compare',
-        className: 'icon-columns',
-        title: 'Toggle Compare',
-        default: true
-      },
-      {
-        name: 'preview',
-        className: 'icon-eye',
-        title: 'Toggle Preview',
-        default: true
-      },
-      {
-        name: 'fullscreen',
-        className: 'icon-full-screen',
-        title: 'Toggle Fullscreen',
-        default: true
-      }
-    ];
+    const _icons = this.getToolsHandle(icons);
     let htmlStr = '<div class="editor-tools-handle">';
     const self = this;
 
@@ -83,9 +93,50 @@ const domRender = {
 
     return htmlStr;
   },
+  /**
+   * 获取 `工具条：视图图标`. 
+   * 
+   * @desc 工具条图标按照编辑功能分为：`编辑图标`、`视图图标` 通过 `isEditTools`是否为 `true` 标记
+   */
+  getToolsHandle(iconsOption) {
+    if (typeof iconsOption !== 'object') return;
+
+    const resultObj = {};
+    let _options = JSON.parse(JSON.stringify(iconsOption));
+    for (let key in _options) {
+      if (!(_options[key]['isEditTools'])) {
+        resultObj[key] = _options[key];
+      }
+    }
+    const sortEditToolsArr = this.sortToolsIcon(resultObj, 'index');
+
+    return sortEditToolsArr;
+  },
+  /**
+   * 图标排序. 
+   * 
+   * @param {Object} obj 需要排序的对象.
+   * @param {string} attr 排序参照属性.
+   */
+  sortToolsIcon(obj, attr) {
+    if (typeof obj !== 'object') return;
+
+    let arr = [];
+    let sortArr = [];
+    for (let key in obj) {
+      arr.push(obj[key])
+    }
+
+    sortArr = arr.sort((obj1, obj2) => {
+      return obj1['index'] - obj2['index'];
+    });
+
+    return sortArr;
+  },
   createToolsItem(config) {
     return `<span class="${config.className}" title="${config.title}"></span>`;
   },
+  // 创建 Edit Tools end =========================
   renderCode(parent) {
     return new Promise((resolve, reject) => {
       parent.innerHTML += `
