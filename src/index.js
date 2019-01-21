@@ -106,8 +106,15 @@ class CoolMDEditor {
   init(options) {
     this.initView(options);
     // this.initData(options);
+    this._options = options;
   }
-
+  // 设置 config
+  set options(option) {
+    // 同值对象值覆盖
+  }
+  get options() {
+    return this._options;
+  }
   /**
    * 初始化编辑器数据. 
    */
@@ -191,7 +198,7 @@ class CoolMDEditor {
    */
   initView(options) {
     this.createIconLink();
-    this.createElement();
+    this.createElement(options);
   }
 
   /**
@@ -201,7 +208,7 @@ class CoolMDEditor {
 
   }
   /**
-   * 编辑器在线图标css链接.
+   * 编辑器在线 `图标css链接` 元素创建.
    */
   createIconLink() {
     const isCreatedIconLink = this.isCreatedIconLink();
@@ -222,8 +229,11 @@ class CoolMDEditor {
     const result = oLink ? true : false;
     return result;
   }
-  createElement() {
-    domRender.init(document.getElementById('editor-wrap')).then(() => {
+  /**
+   * 创建编辑器 `显示容器`. 
+   */
+  createElement(options) {
+    domRender.init(options).then(() => {
       Codemirror.fromTextArea(document.getElementById('area'), codemirror.config);
     });
   }
@@ -371,6 +381,10 @@ class CoolMDEditor {
 export default CoolMDEditor;
 
 // 使用
-new CoolMDEditor(document.getElementById('editor-wrap'));
+const coolMDEditor = new CoolMDEditor({
+  el: document.getElementById('editor-wrap')
+});
+
+console.log('编辑器', coolMDEditor);
 
 
