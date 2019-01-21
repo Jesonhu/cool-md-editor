@@ -208,7 +208,7 @@ class CoolMDEditor {
 
   }
   /**
-   * 编辑器在线 `图标css链接` 元素创建.
+   * 编辑器 `图标css链接` 元素创建.
    */
   createIconLink() {
     const isCreatedIconLink = this.isCreatedIconLink();
