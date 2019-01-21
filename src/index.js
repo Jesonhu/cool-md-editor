@@ -13,7 +13,7 @@ import {
   bindings,
   fixShortcut,
   toggleFullScreen
-} from './editor/editor-toolbar';
+} from './editor/editor-toolbar-event';
 
 // 功能函数
 import {
@@ -88,19 +88,30 @@ const codemirror = {
   }
 }
 
-domRender.init(document.getElementById('editor-wrap'))
-.then(() => {
-  Codemirror.fromTextArea(document.getElementById('area'), codemirror.config);
-})
 
+class CoolMDEditor {
+  constructor(options = {}) {
 
-class MDEditor {
-  constructor(options) {
-    options = options || {};
     options.editor = this;
 
-    this.createIconLink();
+    this.init(options);
 
+    // Auto render
+    // this.render();
+  }
+
+  /**
+   * 初始化. 
+   */
+  init(options) {
+    this.initView(options);
+    // this.initData(options);
+  }
+
+  /**
+   * 初始化编辑器数据. 
+   */
+  initData(options) {
     // Find the element attr
     if (options.element) {
       this.element = options.element;
@@ -168,15 +179,53 @@ class MDEditor {
     // Update this options
     this.options = options;
 
-    // Auto render
-    this.render();
-
     // The codemirror commponent is only avaliable after rendered.
     // so setter for the initialValue can only run after
     // the element has ben renered
     if (options.initialValue && (!this.options.autosave || this.options.autosave.foundSaveValue !== true)) {
       this.value(options.initialValue);
     }
+  }
+  /**
+   * 初始编辑器化视图显示. 
+   */
+  initView(options) {
+    this.createIconLink();
+    this.createElement();
+  }
+
+  /**
+   * 初始化`编辑器`事件处理. 
+   */
+  initEvent() {
+
+  }
+  /**
+   * 编辑器在线图标css链接.
+   */
+  createIconLink() {
+    const isCreatedIconLink = this.isCreatedIconLink();
+    if (isCreatedIconLink) return;
+
+    // @see http://www.runoob.com/jsref/met-document-createelement.html
+    const olink = document.createElement('link');
+    olink.setAttribute('data-editor', true);
+    olink.rel = "stylesheet";
+    olink.href = CONFIG.iconLink;
+    document.getElementsByTagName("head")[0].appendChild(olink);
+  }
+  /**
+   * 检测是否已经创建了编辑器图标样式链接. 
+   */
+  isCreatedIconLink() {
+    const oLink = document.querySelector("link[data-editor]");
+    const result = oLink ? true : false;
+    return result;
+  }
+  createElement() {
+    domRender.init(document.getElementById('editor-wrap')).then(() => {
+      Codemirror.fromTextArea(document.getElementById('area'), codemirror.config);
+    });
   }
 
   /**
@@ -306,20 +355,6 @@ class MDEditor {
     }
   }
 
-  /** 添加图标样式链接 */
-  createIconLink() {
-    const { iconLink } = CONFIG;
-    const link = document.createElement('link');
-
-    // 避免多次生成
-    if (this.options.isCreatedIconLink) return;
-
-    link.rel = 'stylesheet';
-    link.href = iconLink;
-    document.getElementsByTagName('head')[0].appendChild(link);
-    this.options.isCreatedIconLink = true;
-  }
-
   /** 
    * Get or set the text content.
    */
@@ -333,6 +368,9 @@ class MDEditor {
   }
 }
 
-export default MDEditor;
+export default CoolMDEditor;
+
+// 使用
+new CoolMDEditor(document.getElementById('editor-wrap'));
 
 
