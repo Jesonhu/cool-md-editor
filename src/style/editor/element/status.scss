@@ -49,8 +49,8 @@
 
     .editor-status-positon {
       .icon-theme {
-        border-left-color: #333;
-        border-right-color: #333;
+        border-left-color: #c7bebe;
+        border-right-color: #c7bebe;
       }
     }
   }
@@ -60,5 +60,13 @@
 .editor-theme-dark {
   .editor-status {
     background-color:$themeDark;
+    color:#fff;
+
+    .editor-status-positon {
+      .icon-theme {
+        border-left-color: #fff;
+        border-right-color: #fff;
+      }
+    }
   }
 }
