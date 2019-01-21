@@ -1,6 +1,6 @@
 const config = {
   /** 阿里图标连接 */
-  iconLink: '//at.alicdn.com/t/font_823030_zr2neg3akxh.css',
+  iconLink: '//at.alicdn.com/t/font_823030_tfivj0rhpyp.css',
   editor: {
     /** 添加给`编辑器`顶级容器的样式类名 */
     className: {

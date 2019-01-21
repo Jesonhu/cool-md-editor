@@ -1,0 +1,16 @@
+/* ===============================
+ * 图标简化样式.
+ *
+ * @update 2019/01/21
+ * @desc inspire by [CubeUI](https://didi.github.io/cube-ui/#/zh-CN/docs/style)
+ * ===============================
+ */
+ [class*=" icon-"], 
+ [class^=icon-] {
+  font-family: 'iconfont' !important;
+  font-size: 100%;
+  font-style: normal;
+  -webkit-font-smoothing: antialiased;
+  -webkit-text-stroke-width: .2px;
+  -moz-osx-font-smoothing: grayscale;
+}
