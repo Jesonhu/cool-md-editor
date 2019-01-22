@@ -61,7 +61,9 @@ import 'highlight.js/styles/monokai-sublime.css';
 // highlight.js =========================
 
 // @see [config-see])[https://github.com/hackmdio/codimd/blob/master/public/js/lib/editor/index.js]
+
 const codemirror = {
+  /** Codemirror 设置. */
   config: {
     mode: {
       name: 'gfm',
@@ -211,6 +213,9 @@ class CoolMDEditor {
     this.createElement(options)
       .then(() => {
         self.initEvent();
+
+        self.initCodeMirrorData();
+        self.initMarkdownData();
       });
   }
 
@@ -249,12 +254,156 @@ class CoolMDEditor {
   createElement(options) {
     return new Promise((resolve, reject) => {
       domRender.init(options).then(() => {
-        Codemirror.fromTextArea(document.getElementById('area'), codemirror.config);
         resolve();
       });
     });
   }
   // 创建编辑器元素 end ====================================
+
+  // 编辑器 `CodeMirror` 相关 start ====================================
+  /**
+   * 创建 Codemirror 容器. 
+   */
+  createCodeMirrorElement(el, config) {
+    return Codemirror.fromTextArea(el, config);
+  }
+  initCodeMirrorData() {
+    const options = this._options;
+    let mode;
+    let backdrop;
+    let textAreaElement = this._options.el.querySelector('#area');
+    
+    // if (options.spellCheckder !== false) {
+    //   mode = 'spell-checker';
+    //   backdrop = options.parsingConfig;
+    //   backdrop.name = 'gfm';
+    //   backdrop.gitHubSpice = false;
+    // } else {
+    //   mode = options.parsingConfig;
+    //   mode.name = 'gfm';
+    //   mode.gitHubSpice = false;
+    // }
+
+    // CodeMirror 自定义设置
+    const cmDiyConfig = {
+      mode: {
+        name: "gfm",
+        tokenTypeOverrides: {
+          emoji: "emoji"
+        }
+      },
+      /** 显示行号 */
+      lineNumbers: true,
+      // 自动验证错误
+      matchBrackets: true,
+      // 缩进
+      indentUnit: 4,
+      // 是否换行
+      lineWrapping: true,
+      // 点击高亮正行
+      styleActiveLine: true,
+      // 配色(主题)
+      theme: "base16-dark",
+      // 自动补全括号
+      autoCloseBrackets: true,
+      // 自动闭合标签
+      autoCloseTags: true,
+      // 展开折叠
+      foldGutter: true,
+      gutters: ["CodeMirror-linenumbers", "CodeMirror-foldgutter"]
+    }
+
+    // 编辑器默认设置
+    // 实例化编辑器时默认的传参
+    // const editorDefaultConfig = {
+    //   mode: mode,
+    //   backdrop: backdrop,
+    //   theme: "paper",
+    //   tabSize: (options.tabSize != undefined) ? options.tabSize : 2,
+    //   indentUnit: (options.tabSize != undefined) ? options.tabSize : 2,
+    //   indentWithTabs: (options.indentWithTabs === false) ? false : true,
+    //   lineNumbers: false,
+    //   autofocus: (options.autofocus === true) ? true : false,
+    //   extraKeys: keyMaps,
+    //   lineWrapping: (options.lineWrapping === false) ? false : true,
+    //   allowDropFileTypes: ["text/plain"],
+    //   placeholder: options.placeholder || textAreaElement.getAttribute("placeholder") || "",
+    //   styleSelectedText: (options.styleSelectedText != undefined) ? options.styleSelectedText : true
+    // }
+
+    // 参数混合
+    // Object.assign({}, cmDiyConfig);
+    // this.$codemirror = Codemirror.fromTextArea(textAreaElement, cmDiyConfig);
+    this.$codemirror = this.createCodeMirrorElement(textAreaElement, cmDiyConfig);
+
+    this.initCodeMirrorEvent();
+  }
+  initCodeMirrorEvent() {
+    this.addCodeMirrorChangeEventHandle();
+  }
+  addCodeMirrorChangeEventHandle() {
+    // 没有使用箭头函数，通过这种方式获取 `编辑器对象`
+    this.$codemirror.$editor = this;
+
+    this.$codemirror.on('changes', this.onCodeMirrorChange);
+  }
+  onCodeMirrorChange(cm) {
+    const content = cm.getValue();
+    const editor = cm.$editor;
+    editor.setMDValue(content);
+  }
+  // 编辑器 `CodeMirror` 相关 end ====================================
+
+  // 编辑器 `markdown` 相关 start ====================================
+  initMarkdownData(text) {
+    if (marked) {
+      const markedOptions = {
+        gfm: true,
+        tables: true,
+        breaks: false,
+        pedantic: false,
+        sanitize: false,
+        smartLists: true,
+        smartypants: false,
+        highlight: function(code) {
+          return hljs.highlightAuto(code).value;
+        }
+      }
+      this.$marked = marked;
+      // Set options
+      this.$marked.setOptions(markedOptions);
+    }
+  }
+  initMarkdownEvent() {
+    this.addCodeMirrorChangeEventHandle();
+  }
+  /** 
+   * 获取 `CodeMirror` 的值.
+   */
+  getMDValue() {
+
+  }
+  /**
+   * 设置 `CodeMirror` 的值. 
+   */
+  setMDValue(mdValue) {
+    const htmlStr = this.$marked(mdValue);
+    const htmlElement = this._options.el.querySelector('.editor-preview').querySelector('.preview-bd');
+    htmlElement.innerHTML = htmlStr;
+  }
+  // 编辑器 `markdown` 相关 end ====================================
+
+  // 编辑器 `preview` 容器相关 start ====================================
+  // 编辑器 `preview` 容器相关 end ====================================
+
+  // 编辑器 `status` 容器相关 end ====================================
+  setStatusLength(len) {
+    const editorEl = this._options.el;
+    const lenElement = editorEl.querySelector('.editor-status').querySelector('.editor-status-length');
+
+    lenElement.innerHTML = `Length ${len}`;
+  }
+  // 编辑器 `status` 容器相关 end ====================================
 
   // 编辑器初始状态设置 start ====================================
   initEditorStatus(options) {
@@ -339,93 +488,6 @@ class CoolMDEditor {
       }
     }, false);
 
-    let mode;
-    let backdrop;
-    if (options.spellCheckder !== false) {
-      mode = 'spell-checker';
-      backdrop = options.parsingConfig;
-      backdrop.name = 'gfm';
-      backdrop.gitHubSpice = false;
-    } else {
-      mode = options.parsingConfig;
-      mode.name = 'gfm';
-      mode.gitHubSpice = false;
-    }
-
-    const cmDiyConfig = {
-      mode: {
-        name: "gfm",
-        tokenTypeOverrides: {
-          emoji: "emoji"
-        }
-      },
-      /** 显示行号 */
-      lineNumbers: true,
-      // 自动验证错误
-      matchBrackets: true,
-      // 缩进
-      indentUnit: 4,
-      // 是否换行
-      lineWrapping: true,
-      // 点击高亮正行
-      styleActiveLine: true,
-      // 配色(主题)
-      theme: "base16-dark",
-      // 自动补全括号
-      autoCloseBrackets: true,
-      // 自动闭合标签
-      autoCloseTags: true,
-      // 展开折叠
-      foldGutter: true,
-      gutters: ["CodeMirror-linenumbers", "CodeMirror-foldgutter"]
-    }
-
-    // 编辑器默认设置
-    // 实例化编辑器时默认的传参
-    const editorDefaultConfig = {
-      mode: mode,
-      backdrop: backdrop,
-      theme: "paper",
-      tabSize: (options.tabSize != undefined) ? options.tabSize : 2,
-      indentUnit: (options.tabSize != undefined) ? options.tabSize : 2,
-      indentWithTabs: (options.indentWithTabs === false) ? false : true,
-      lineNumbers: false,
-      autofocus: (options.autofocus === true) ? true : false,
-      extraKeys: keyMaps,
-      lineWrapping: (options.lineWrapping === false) ? false : true,
-      allowDropFileTypes: ["text/plain"],
-      placeholder: options.placeholder || el.getAttribute("placeholder") || "",
-      styleSelectedText: (options.styleSelectedText != undefined) ? options.styleSelectedText : true
-    }
-
-    // 参数混合
-    Object.assign(editorDefaultConfig, cmDiyConfig);
-
-    // `el` 表示 `textArea`
-    this.codemirror = CodeMirror.fromTextArea(el, cmDiyConfig);
-  }
-
-  markdown(text) {
-    if (marked) {
-      const markedOptions = {
-        gfm: true,
-        tables: true,
-        breaks: false,
-        pedantic: false,
-        sanitize: false,
-        smartLists: true,
-        smartypants: false,
-        highlight: function(code) {
-          return hljs.highlightAuto(code).value;
-        }
-      }
-
-      // Set options
-      marked.setOptions(markedOptions);
-
-      // Return
-      return marked(text);
-    }
   }
 
   /** 

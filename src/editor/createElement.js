@@ -137,6 +137,8 @@ const domRender = {
     return `<span class="${config.className}" title="${config.title}"></span>`;
   },
   // 创建 Edit Tools end =========================
+
+  // 创建 Edit 编辑容器 start =========================
   renderCode(options) {
     const el = options.el;
     return new Promise((resolve, reject) => {
@@ -151,6 +153,9 @@ const domRender = {
     })
     
   },
+  // 创建 Edit 编辑容器 end =========================
+
+  // 创建 Edit 预览(html)容器 start =========================
   renderPriview(options) {
     const el = options.el;
     return new Promise((resolve, reject) => {
@@ -163,6 +168,8 @@ const domRender = {
       resolve();
     });
   },
+  // 创建 Edit 预览(html)容器 end =========================
+
   // 创建 Edit Status start =========================
   renderStatus(options) {
     const el = options.el;
