@@ -253,7 +253,7 @@ const toolbarBuiltInButtons = {
     default: true,
     index: 4,
     isEditTools: false
-  }
+  },
 
 }
 

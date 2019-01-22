@@ -46,12 +46,26 @@ const domRender = {
   createToolsMain(icons) {
     const self = this;
     const toolsEdit = this.getToolsEdit(icons);
+    console.log('toolsEdit', toolsEdit);
     let htmlStr = '<div class="editor-tools-main">';
 
     // 循环创建图标
     if (toolsEdit.length > 0) {
-      toolsEdit.forEach(item => {
-        htmlStr += self.createToolsItem(item);
+      /* 是否是3的倍数 */
+      let isThree;
+      const toolsEditLen = toolsEdit.length;
+      toolsEdit.forEach((item, index) => {
+        isThree = index > 0 && ((index + 1) % 3);
+        if (isThree === 0) {
+          if (index !== (toolsEditLen - 1)) {
+            console.log(item);
+            htmlStr = htmlStr + self.createToolsItem(item) + '<span class="editor-tools-division">|</span>';
+          } else {
+            htmlStr += self.createToolsItem(item);
+          }
+        } else {
+          htmlStr += self.createToolsItem(item);
+        }
       });
     }
     

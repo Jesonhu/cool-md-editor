@@ -40,6 +40,15 @@
     }
     .editor-tools-main {
       flex: 70%;
+      .editor-tools-division {
+        width:13px;
+        height: 30px;
+        line-height: 25px;
+        text-align: center;
+        border:none;
+        margin:0;
+        cursor: auto;
+      }
     }
     .editor-tools-handle {
       flex: 30%;
@@ -57,9 +66,14 @@
     /* 编辑器图标样式 start */
     .editor-tools-main > *,
     .editor-tools-handle > * {
-      color:#555;
+      color:  darken($themeLight, 70);
       &.active {
-        border-color: #555;
+        border-color: darken($themeLight, 70);
+      }
+    }
+    .editor-tools-main {
+      .editor-tools-division {
+        color: darken($themeLight, 30);
       }
     }
     /* 编辑器图标样式 end */
@@ -74,9 +88,14 @@
     /* 编辑器图标样式 start */
     .editor-tools-main > *,
     .editor-tools-handle > * {
-      color:#fff;
+      color: lighten($themeDark, 70);
       &.active {
-        border-color: #fff;
+        border-color: lighten($themeDark, 70);
+      }
+    }
+    .editor-tools-main {
+      .editor-tools-division {
+        color: lighten($themeDark, 30);
       }
     }
     /* 编辑器图标样式 end */
