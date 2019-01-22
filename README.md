@@ -16,10 +16,10 @@ npm run devServer
 
 |属性|类型|说明|默认值|可选值|
 |--|--|--|:--:|:--:|
-|`$codemirror`| `CodeMirror` 实例对象 | `CodeMirror` 实例对象 | - | - |
-| `$marked`| `marked` 实例对象 | `marked` 实例对象 | - | - |
-| `$status` | Object | 编辑器当前的状态 | - | - |
-| `_options` | Object | Cool-MD-Editor 编辑器配置 | - | - |
+|[`$codemirror`](https://github.com/Jesonhu/cool-md-editor#codemirror-属性)| `CodeMirror` 实例对象 | `CodeMirror` 实例对象 | - | - |
+| [`$marked`](https://github.com/Jesonhu/cool-md-editor#marked-属性)| `marked` 实例对象 | `marked` 实例对象 | - | - |
+| [`$status`](https://github.com/Jesonhu/cool-md-editor#status-属性) | Object | 编辑器当前的状态 | - | - |
+| [`_options`](https://github.com/Jesonhu/cool-md-editor#_options-属性) | Object | Cool-MD-Editor 编辑器配置 | - | - |
 
 
 #### `$codemirror` 属性
