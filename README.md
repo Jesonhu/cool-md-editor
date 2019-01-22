@@ -21,24 +21,29 @@ npm run devServer
 | `$status` | Object | 编辑器当前的状态 | - | - |
 | `_options` | Object | Cool-MD-Editor 编辑器配置 | - | - |
 
+
 #### `$codemirror` 属性
+
 |属性|类型|说明|默认值|可选值|
 |--|--|--|--|:--:|:--:|
 | `$editor` | Object | 编辑器实例对象 | - | - |
 | 其他属性 | any | `CodeMirror` 实例对象支持的属性和方法，参见[文档](https://codemirror.net/doc/manual.html) | - | - |
 
 #### `$marked` 属性
+
 |属性|类型|说明|默认值|可选值|
 |--|--|--|--|:--:|:--:|
 | 全部属性 | any | `marked` 实例对象支持的属性和方法，参见[文档](https://marked.js.org/#/README.md#README.md) | - | - |
 
 #### `$status` 属性
+
 |属性|类型|说明|默认值|可选值|
 |--|--|--|--|:--:|:--:|
 | `isFullscreen` | Boolean | 是否全屏显示, 全屏为 `true` | `false` 或者本地存储设置值| - |
 | `isThemeLight` | Boolean | 是否主题为`圣光`, 目前只有 `圣光` 和 `暗黑` 主题 ，根据 `base16` 扩展而来。未来也只考虑两套主题(光/暗) | true 或者本地存储设置值| - |
 
 #### `_options` 属性
+
 |属性|类型|说明|默认值|可选值|
 |--|--|--|--|:--:|:--:|
 | `el` | HTMLElement | 编辑器 `dom` 元素| - | - |
