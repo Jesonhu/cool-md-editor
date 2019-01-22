@@ -110,11 +110,10 @@ class CoolMDEditor {
    * 初始化. 
    */
   init(options) {
-    this._options = options;
-    this._options.$tools = $tools;
-    this.initData(options);
-    this.initView(options);
-    this.init
+    this.initData(options)
+      .then(() => {
+        this.initView(options);
+      });
   }
   // 设置 config
   set options(option) {
@@ -201,8 +200,12 @@ class CoolMDEditor {
   //     this.value(options.initialValue);
   //   }
   // }
-  initData() {
-    this.initEditorStatus();
+  initData(options) {
+    return new Promise((resolve, reject) => {
+      this.initOption(options);
+      this.initEditorStatus();
+      resolve();
+    }); 
   }
   /**
    * 初始编辑器化视图显示. 
@@ -213,7 +216,6 @@ class CoolMDEditor {
     this.createElement(options)
       .then(() => {
         self.initEvent();
-
         self.initCodeMirrorData();
         self.initMarkdownData();
       });
@@ -224,6 +226,11 @@ class CoolMDEditor {
    */
   initEvent() {
     this.initStatusEvent();
+  }
+  initOption(options) {
+    this._options = options;
+    this._options.$tools = $tools;
+    this._options.lang= CONFIG.editor.language;
   }
   // 创建编辑器元素 start ====================================
   /**
@@ -335,22 +342,48 @@ class CoolMDEditor {
     // Object.assign({}, cmDiyConfig);
     // this.$codemirror = Codemirror.fromTextArea(textAreaElement, cmDiyConfig);
     this.$codemirror = this.createCodeMirrorElement(textAreaElement, cmDiyConfig);
+    
+    // 没有使用箭头函数，通过这种方式获取 `编辑器对象`
+    this.$codemirror.$editor = this;
 
     this.initCodeMirrorEvent();
   }
   initCodeMirrorEvent() {
-    this.addCodeMirrorChangeEventHandle();
+    this.add_CM_change_eventHandle();
+    this.add_CM_cursorActivity_eventHandle();
   }
-  addCodeMirrorChangeEventHandle() {
-    // 没有使用箭头函数，通过这种方式获取 `编辑器对象`
-    this.$codemirror.$editor = this;
-
+  /**
+   * `CodeMirror` 内容变化事件监听.
+   */
+  add_CM_change_eventHandle() {
     this.$codemirror.on('changes', this.onCodeMirrorChange);
   }
   onCodeMirrorChange(cm) {
+    // 编辑器实例.
+    const editor = cm.$editor;
+    editor.commonCodeMirrorEventHandle(cm);
+  }
+  /**
+   * `CodeMirror` 光标移动事件监听.
+   */
+  add_CM_cursorActivity_eventHandle() {
+    this.$codemirror.on('cursorActivity', this.onCodeMirrorCursorActivity);
+  }
+  onCodeMirrorCursorActivity(cm) {
+    // 编辑器实例.
+    const editor = cm.$editor;
+    editor.commonCodeMirrorEventHandle(cm);
+  }
+  /**
+   * `CodeMirror` 事件回调中都需要处理的内容. 
+   * 
+   * @param {CodeMirror} cm CodeMirror 对象.
+   */
+  commonCodeMirrorEventHandle(cm) {
     const content = cm.getValue();
     const editor = cm.$editor;
     editor.setMDValue(content);
+    editor.updateStatusBar(editor);
   }
   // 编辑器 `CodeMirror` 相关 end ====================================
 
@@ -375,7 +408,6 @@ class CoolMDEditor {
     }
   }
   initMarkdownEvent() {
-    this.addCodeMirrorChangeEventHandle();
   }
   /** 
    * 获取 `CodeMirror` 的值.
@@ -397,11 +429,43 @@ class CoolMDEditor {
   // 编辑器 `preview` 容器相关 end ====================================
 
   // 编辑器 `status` 容器相关 end ====================================
-  setStatusLength(len) {
+  updateStatusBar() {
+    const cm = this.$codemirror;
+
+    const conLen = cm.getValue().length;
+    this.renderEditorContentPosition();
+    this.renderEditContentLength(conLen);
+  }
+  /**
+   * 显示输入内容总长度.
+   * 
+   * @param {Number|String} len 长度
+   */
+  renderEditContentLength(len) {
     const editorEl = this._options.el;
     const lenElement = editorEl.querySelector('.editor-status').querySelector('.editor-status-length');
+    const language = this._options.lang;
+    const { length } = language.statusBar;
 
-    lenElement.innerHTML = `Length ${len}`;
+    lenElement.innerHTML = `${length} ${len}`;
+  }
+  /**
+   * 显示当前光标所在的 `行数`、`列数`. `总列数`、`总长度`.
+   */
+  renderEditorContentPosition() {
+    const cm = this.$codemirror;
+    // @see [codemirror-api](https://codemirror.net/doc/manual.html#api)
+    // @see [获取光标所在的位置]https://github.com/hackmdio/codimd/blob/db69983a622693962a0fd42b2f091b3f3b6f6906/public/js/lib/editor/index.js
+    const lineCount = cm.lineCount();
+    const cmCursor = cm.getCursor();
+    const currCol = cmCursor.ch + 1;
+    const currLine = cmCursor.line + 1;
+    const language = this._options.lang;
+    const { line, columns } = language.statusBar;
+
+    const editorEl = this._options.el;
+    const statusBarEl = editorEl.querySelector('.editor-status').querySelector('.editor-status-positon').querySelector('span');
+    statusBarEl.innerHTML = `${line} ${currLine},${columns} ${currCol} 一 ${lineCount} ${line}`;
   }
   // 编辑器 `status` 容器相关 end ====================================
 

@@ -1,6 +1,6 @@
 const domRender = {
   init(options) {
-    const el = options.el;
+    this.initData(options);
     return new Promise((resolve, reject) => {
       this.renderTools(options)
       .then(() => {
@@ -23,6 +23,9 @@ const domRender = {
     // await this.renderCode(parent);
     // await this.renderPriview(parent);
     // await this.renderStatus(parent);
+  },
+  initData(options) {
+    this.lang = options.lang;
   },
   // 创建 Edit Tools start =========================
   renderTools(options) {
@@ -174,7 +177,7 @@ const domRender = {
   renderStatus(options) {
     const el = options.el;
 
-    const positonHtmlStr = this.createStatusPosition();
+    const positonHtmlStr = this.createStatusPosition(options);
     const lengthHtmlStr = this.createStatusLens();
     return new Promise((resolve, reject) => {
       el.innerHTML += `
@@ -184,7 +187,9 @@ const domRender = {
   },
   createStatusPosition(options) {
     const toggleThemeHtmlStr = this.createStatusToggleTheme();
-    let htmlStr = `<div class="editor-status-positon"><span>Line 53,Columns 1 一 233 Lines</span>${toggleThemeHtmlStr}</div>`;
+    const language = this.lang;
+    const { line,  columns } = language.statusBar;
+    let htmlStr = `<div class="editor-status-positon"><span>${line} ,${columns}  一  ${line}</span>${toggleThemeHtmlStr}</div>`;
 
     return htmlStr;
   },
@@ -194,7 +199,9 @@ const domRender = {
     return htmlStr;
   },
   createStatusLens() {
-    let htmlStr = '<div class="editor-status-length">Length 15316</div>';
+    const language = this.lang;
+    const { length } = language.statusBar;
+    let htmlStr = `<div class="editor-status-length">${length}</div>`;
 
     return htmlStr;
   }
