@@ -98,6 +98,13 @@ const openFullScreen = (editor) => {
 
 }
 
+/**
+ * 关于编辑器. 
+ */
+const aboutEditor = (editor) => {
+
+}
+
 
 
 // Mapping of actions that can be bound to keyboard shortcuts or toolbar buttons
@@ -112,6 +119,7 @@ const bindings = {
   'toggleOrderedList': toggleOrderedList,
   'drawImage': drawImage,
   'drawLink': drawLink,
+  'aboutEditor': aboutEditor,
   'openEdit': openEdit,
   'openCompare': openCompare,
   'openPreview': openPreview,
@@ -201,13 +209,22 @@ const toolbarBuiltInButtons = {
     index: 8,
     isEditTools: true
   },
+  'about': {
+    name: 'about',
+    className: 'icon-question',
+    action: aboutEditor,
+    title: 'About Editor',
+    default: true,
+    index: 0,
+    isEditTools: false
+  },
   'edit': {
     name: 'edit',
     className: 'icon-pen',
     action: openEdit,
     title: 'Toggle Edit',
     default: true,
-    index: 0,
+    index: 1,
     isEditTools: false
   },
   'compare': {
@@ -216,7 +233,7 @@ const toolbarBuiltInButtons = {
     action: openCompare,
     title: 'Toggle Compare',
     default: true,
-    index: 1,
+    index: 2,
     isEditTools: false
   },
   'preview': {
@@ -225,7 +242,7 @@ const toolbarBuiltInButtons = {
     action: openPreview,
     title: 'Toggle Preview',
     default: true,
-    index: 2,
+    index: 3,
     isEditTools: false
   },
   'fullscreen': {
@@ -234,7 +251,7 @@ const toolbarBuiltInButtons = {
     action: openFullScreen,
     title: 'Toggle Fullscreen',
     default: true,
-    index: 3,
+    index: 4,
     isEditTools: false
   }
 
