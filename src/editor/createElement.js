@@ -53,10 +53,11 @@ const domRender = {
     if (toolsEdit.length > 0) {
       /* 是否是3的倍数 */
       let isThree;
+
       const toolsEditLen = toolsEdit.length;
       toolsEdit.forEach((item, index) => {
-        isThree = index > 0 && ((index + 1) % 3);
-        if (isThree === 0) {
+        isThree = index > 0 && ((index + 1) % 3 === 0);
+        if (isThree) {
           if (index !== (toolsEditLen - 1)) {
             console.log(item);
             htmlStr = htmlStr + self.createToolsItem(item) + '<span class="editor-tools-division">|</span>';
