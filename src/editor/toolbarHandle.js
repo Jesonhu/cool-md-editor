@@ -13,7 +13,8 @@ let EDITOR = null;
  */
 
  /** 
-  * 点击 `加粗` 图标.
+  * Action fro toggle Bold.
+  * `加粗` 图标处理功能
   */
 const toggleBold = (e) => {
   e = e || windowl.event;
@@ -83,7 +84,7 @@ const toggleBold = (e) => {
 
 /** 
  * Action fro toggle Italic.
- * 切换是否`斜体`功能.
+ * `斜体` 图标处理功能
  */
 const toggleItalic = (e) => {
   e = e || windowl.event;
@@ -129,12 +130,65 @@ const toggleItalic = (e) => {
   cm.focus();
 }
 
+// 标题相关 start =========================
 /**
- * Action for toggle Heading 
+ * Action for toggle Heading.
+ * `标题` 图标处理功能
  */
-const toggleHeading = (editor) => {
+const toggleHeading = (e) => {
+  e = e || windowl.event;
+  const self = e.currentTarget;
+  const editor = self.$editor;
+  const cm = editor.$codemirror;
+
+  // 获取当前激活的类型
+  const type = self.getAttribute('data-name') || 'Heading';
+  // 当前块对应的 markdown 类型.
+  const blockStyles = editor._options.$tools.blockStyles[type];
+  const stat = getState(cm);
+  
+  let startChars = blockStyles;
+  let endChars = blockStyles;
+
+  let startPoint = cm.getCursor('start');
+  let endPoint = cm.getCursor('end');
+
+  for (let i = startPoint.line; i <= endPoint.line; i++) {
+    // 插入内容
+    let text = cm.getLine(i);
+    const currHeadingLevel = text.search(/[^#]/);
+
+    text = "# " + text.substr(currHeadingLevel + 1);
+
+    cm.replaceRange(text, {
+      line: i,
+      ch: 0
+    }, {
+      line: i,
+      ch: 99999999999999
+    });
+  }
+
+  cm.focus();
+}
+
+/**
+ * Action for toggling heading size: normal -> h1 -> h2 -> h3 -> h4 -> h5 -> h6 -> normal
+ * `小标题` 处理功能
+ */
+const toggleHeadingSmaller = (e) => {
 
 }
+
+/**
+ * Action for toggling heading size: normal -> h6 -> h5 -> h4 -> h3 -> h2 -> h1 -> normal
+ * `大标题` 处理功能
+ */
+const toggleHeadingBigger = (e) => {
+  
+}
+
+// 标题相关 end =========================
 
 /**
  * Action for toggle Blockquote
