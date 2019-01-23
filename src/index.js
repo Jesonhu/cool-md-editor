@@ -269,6 +269,9 @@ class CoolMDEditor {
   // 创建编辑器元素 end ====================================
 
   // 编辑器 `Tools` 相关 start ====================================
+  /**
+   * 图标添加点击事件监听. 
+   */
   initToolsEvent() {
     const self = this;
     const toolsObj = this._options.$tools;
