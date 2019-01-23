@@ -13,6 +13,10 @@
 // 公共样式
 .cool-md-editor-wrap {
   .editor-md {
+    // Tips: 解决 flex:1 时，内容仍然超出问题.
+    text-overflow: ellipsis; 
+    overflow: hidden; 
+    white-space: nowrap; 
     form,
     .CodeMirror {
       height: 100%;
