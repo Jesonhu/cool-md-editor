@@ -44,7 +44,13 @@ const Util = {
    * 元素样式切换. 
    */
   toggleClass(el, className) {
-
+    if (typeof el !== 'object') return;
+    const isExist = el.classList.contains(className);
+    if (isExist) {
+      el.classList.remove(className);
+    } else {
+      el.classList.add(className);
+    }
   },
 
   /**
@@ -66,6 +72,38 @@ const Util = {
     if (isExist) {
       el.classList.remove(className);
     }
+  },
+
+  /**
+   * 对象转为数组.
+   * 
+   * @param {Object} obj 需要转换的对象. 
+   */
+  obj2Arr(obj) {
+    if (typeof obj !== 'object') return;
+    if (Array.isArray(obj)) return;
+
+    const arr = [];
+    const keyArr = Object.getOwnPropertyNames(obj);
+    if (keyArr.length > 0) {
+      let value;
+      keyArr.forEach(item => {
+        value = obj[item];
+        arr.push(value);
+      });
+    }
+    return arr;
+  },
+
+  /**
+   * 判断是否为函数. 
+   */
+  isFunction(fn) {
+    let result = false;
+    if (typeof fn === 'function') {
+      result = true;
+    }
+    return result;
   }
 }
 

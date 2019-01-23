@@ -1,6 +1,8 @@
-import {
-  isMac
-} from '../util/Util';
+import UTIL from '../util/Util';
+
+const { toggleClass } = UTIL;
+
+let EDITOR = null;
 /**
  * 工具栏功能
  */
@@ -92,10 +94,15 @@ const openPreview = (editor) => {
 }
 
 /**
- * 打开全屏效果 
+ * 全屏按钮点击处理回调. 
  */
-const openFullScreen = (editor) => {
+const openFullScreen = (e) => {
+  const editor = commoFnHanlde(e);
+  
+  if (!EDITOR) EDITOR = editor;
+  const editorEl = EDITOR._options.el;
 
+  toggleClass(editorEl, 'fullscreen');
 }
 
 /**
@@ -103,6 +110,22 @@ const openFullScreen = (editor) => {
  */
 const aboutEditor = (editor) => {
 
+}
+
+/**
+ * Tools 图标点击回调处理函数中相同的处理部分. 
+ * 
+ * @param {Object} e 触发图标对应回调的事件对象.
+ * @return {Object} editor 编辑器实例对象.
+ */
+function commoFnHanlde (e) {
+  e = e || window.event;
+  const self = e.currentTarget;
+  const editor = self.$editor;
+
+  toggleClass(self, 'active');
+
+  return editor;
 }
 
 
@@ -300,12 +323,12 @@ const shortcuts = {
  * @desc win: Ctrl; mac: Cmd
  */
 const fixShortcut = (name) => {
-  if (isMac) {
-    name = name.replace('Ctrl', 'Cmd');
-  } else {
-    name = name.replace('Cmd', 'Ctrl');
-  }
-  return name;
+  // if (isMac) {
+  //   name = name.replace('Ctrl', 'Cmd');
+  // } else {
+  //   name = name.replace('Cmd', 'Ctrl');
+  // }
+  // return name;
 }
 
 export default {

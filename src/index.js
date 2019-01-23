@@ -226,6 +226,7 @@ class CoolMDEditor {
    */
   initEvent() {
     this.initStatusEvent();
+    this.initToolsEvent();
   }
   initOption(options) {
     this._options = options;
@@ -266,6 +267,33 @@ class CoolMDEditor {
     });
   }
   // 创建编辑器元素 end ====================================
+
+  // 编辑器 `Tools` 相关 start ====================================
+  initToolsEvent() {
+    const self = this;
+    const toolsObj = this._options.$tools;
+    const editorEl = this._options.el;
+    const { toolbarBuiltInButtons } = toolsObj;
+    const toolsArr = UTIL.obj2Arr(toolbarBuiltInButtons);
+
+    if (toolsArr.length > 0) {
+      toolsArr.forEach(item => {
+        const className = '.' + item['className'];
+        const callBack = item['action'];
+        const isFunction = UTIL.isFunction(callBack);
+
+        if (className !== '' && isFunction) {
+          const toolEl = editorEl.querySelector('.editor-tools').querySelector(className);
+          if (toolEl) {
+            toolEl.$editor = self;
+            // @see https://developer.mozilla.org/zh-CN/docs/Web/API/EventTarget/addEventListener
+            toolEl.addEventListener('click', callBack, false);
+          }
+        }
+      });
+    }
+  }
+  // 编辑器 `Tools` 相关 end ====================================
 
   // 编辑器 `CodeMirror` 相关 start ====================================
   /**
