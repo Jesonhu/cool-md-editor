@@ -150,7 +150,7 @@ const domRender = {
     return sortArr;
   },
   createToolsItem(config) {
-    return `<span class="${config.className}" title="${config.title}"></span>`;
+    return `<span class="${config.className}" title="${config.title}" data-name="${config.name}"></span>`;
   },
   // 创建 Edit Tools end =========================
 

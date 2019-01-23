@@ -21,11 +21,11 @@ const toggleBold = (e) => {
   const editor = self.$editor;
   const cm = editor.$codemirror;
 
-  // 当前块对应的 markdown 类型.
-  const blockStyles = editor._options.$tools.blockStyles.bold;
-
   // 获取当前激活的类型
-  const type = 'bold';
+  const type = self.getAttribute('data-name') || 'bold';
+  // 当前块对应的 markdown 类型.
+  const blockStyles = editor._options.$tools.blockStyles[type];
+
   const stat = getState(cm);
   // 插入内容
   let text;
@@ -34,31 +34,31 @@ const toggleBold = (e) => {
 
   let startPoint = cm.getCursor('start');
   let endPoint = cm.getCursor('end');
-  
+
   // 当前激活的类型
   if (stat[type]) {
-    text = cm.getLine(startPoint.line);
-    startChars = text.slice(0, startPoint.ch);
-    endChars = text.slice(startPoint.ch);
+    // text = cm.getLine(startPoint.line);
+    // startChars = text.slice(0, startPoint.ch);
+    // endChars = text.slice(startPoint.ch);
 
-    if(type == "bold") {
-			startChars = startChars.replace(/(\*\*|__)(?![\s\S]*(\*\*|__))/, "");
-			endChars = endChars.replace(/(\*\*|__)/, "");
-		} else if(type == "italic") {
-			startChars = startChars.replace(/(\*|_)(?![\s\S]*(\*|_))/, "");
-			endChars = endChars.replace(/(\*|_)/, "");
-		} else if(type == "strikethrough") {
-			startChars = startChars.replace(/(\*\*|~~)(?![\s\S]*(\*\*|~~))/, "");
-			endChars = endChars.replace(/(\*\*|~~)/, "");
-    }
+    // if(type == "bold") {
+		// 	startChars = startChars.replace(/(\*\*|__)(?![\s\S]*(\*\*|__))/, "");
+		// 	endChars = endChars.replace(/(\*\*|__)/, "");
+		// } else if(type == "italic") {
+		// 	startChars = startChars.replace(/(\*|_)(?![\s\S]*(\*|_))/, "");
+		// 	endChars = endChars.replace(/(\*|_)/, "");
+		// } else if(type == "strikethrough") {
+		// 	startChars = startChars.replace(/(\*\*|~~)(?![\s\S]*(\*\*|~~))/, "");
+		// 	endChars = endChars.replace(/(\*\*|~~)/, "");
+    // }
     
-    cm.replaceRange(startChars + endChars, {
-      line: startPoint.line,
-      ch: 0
-    }, {
-      line: startPoint.line,
-      ch: 99999999999999
-    });
+    // cm.replaceRange(startChars + endChars, {
+    //   line: startPoint.line,
+    //   ch: 0
+    // }, {
+    //   line: startPoint.line,
+    //   ch: 99999999999999
+    // });
   } else { // 需要插入的内容
     text = cm.getSelection();
 
@@ -85,8 +85,48 @@ const toggleBold = (e) => {
  * Action fro toggle Italic.
  * 切换是否`斜体`功能.
  */
-const toggleItalic = (editor) => {
+const toggleItalic = (e) => {
+  e = e || windowl.event;
+  const self = e.currentTarget;
+  const editor = self.$editor;
+  const cm = editor.$codemirror;
 
+  // 获取当前激活的类型
+  const type = self.getAttribute('data-name') || 'italic';
+  // 当前块对应的 markdown 类型.
+  const blockStyles = editor._options.$tools.blockStyles[type];
+  const stat = getState(cm);
+  // 插入内容
+  let text;
+  let startChars = blockStyles;
+  let endChars = blockStyles;
+
+  let startPoint = cm.getCursor('start');
+  let endPoint = cm.getCursor('end');
+
+  // 当前激活的类型
+  if (stat[type]) {
+    
+  } else { // 需要插入的内容
+    text = cm.getSelection();
+
+    if(type == "bold") {
+			text = text.split("**").join("");
+			text = text.split("__").join("");
+		} else if(type == "italic") {
+			text = text.split("*").join("");
+			text = text.split("_").join("");
+		} else if(type == "strikethrough") {
+			text = text.split("~~").join("");
+    }
+    cm.replaceSelection(startChars + text + endChars);
+
+    startPoint.ch += startChars.length;
+    endPoint.ch = startPoint.ch + text.length;
+  }
+
+  cm.setSelection(startPoint, endPoint);
+  cm.focus();
 }
 
 /**
@@ -280,22 +320,22 @@ function commoFnHanlde (e) {
 
 // Mapping of actions that can be bound to keyboard shortcuts or toolbar buttons
 // 绑定函数名
-const bindings = {
-  'toggleBold': toggleBold,
-  'toggleItalic': toggleItalic,
-  'toggleHeading': toggleHeading,
-  'toggleBlockquote': toggleBlockquote,
-  'toggleCodeBlock': toggleCodeBlock,
-  'toggleUnorderedList': toggleUnorderedList,
-  'toggleOrderedList': toggleOrderedList,
-  'drawImage': drawImage,
-  'drawLink': drawLink,
-  'aboutEditor': aboutEditor,
-  'openEdit': openEdit,
-  'openCompare': openCompare,
-  'openPreview': openPreview,
-  'openFullScreen': openFullScreen
-}
+// const bindings = {
+//   'toggleBold': toggleBold,
+//   'toggleItalic': toggleItalic,
+//   'toggleHeading': toggleHeading,
+//   'toggleBlockquote': toggleBlockquote,
+//   'toggleCodeBlock': toggleCodeBlock,
+//   'toggleUnorderedList': toggleUnorderedList,
+//   'toggleOrderedList': toggleOrderedList,
+//   'drawImage': drawImage,
+//   'drawLink': drawLink,
+//   'aboutEditor': aboutEditor,
+//   'openEdit': openEdit,
+//   'openCompare': openCompare,
+//   'openPreview': openPreview,
+//   'openFullScreen': openFullScreen
+// }
 
 // 按钮定义
 const toolbarBuiltInButtons = {
@@ -480,7 +520,7 @@ const fixShortcut = (name) => {
 }
 
 export default {
-  bindings,
+  // bindings,
 
   toolbarBuiltInButtons,
 
@@ -493,11 +533,5 @@ export default {
   shortcuts,
 
   fixShortcut,
-  toggleBold,
-  toggleItalic,
-  openEdit,
-  openCompare,
-  openPreview,
-  openFullScreen
 
 }
