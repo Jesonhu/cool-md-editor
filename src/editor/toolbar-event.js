@@ -75,7 +75,7 @@ const drawLink = (editor) => {
 }
 
 /**
- * 打开仅编辑部分
+ * 仅显示编辑部分
  */
 const openEdit = (e) => {
   e = e || window.event;
@@ -109,7 +109,7 @@ const openEdit = (e) => {
 }
 
 /**
- * 打开编辑和预览.
+ * 显示编辑和预览.
  */
 const openCompare = (e) => {
   e = e || window.event;
@@ -118,7 +118,7 @@ const openCompare = (e) => {
 
   if (!EDITOR) EDITOR = editor;
   const isShowAll = EDITOR.$status['isShowAll'];
-  
+
   // 当前只显示编辑效果
   if (isShowAll) return;
 
@@ -143,7 +143,7 @@ const openCompare = (e) => {
 }
 
 /**
- * 打开仅预览部分. 
+ * 仅显示预览部分. 
  */
 const openPreview = (e) => {
   e = e || window.event;
