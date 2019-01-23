@@ -554,18 +554,6 @@ class CoolMDEditor {
     }, false);
 
   }
-
-  /** 
-   * Get or set the text content.
-   */
-  value(value) {
-    if (value === undefined) {
-      return this.codemirror.getValue();
-    } else {
-      this.codemirror.getDoc().setValue(value);
-      return this;
-    }
-  }
 }
 
 export default CoolMDEditor;
