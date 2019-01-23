@@ -4,22 +4,8 @@ import CONFIG from './editor/config';
 
 // 工具图标功能
 import './style/index.scss';
-// import {
-//   toolbarBuiltInButtons,
-//   insertTexts,
-//   promptTexts,
-//   blockStyles,
-//   shortcuts,
-//   bindings,
-//   fixShortcut,
-//   toggleFullScreen
-// } from './editor/toolbar-event';
-import $tools from './editor/toolbar-event';
 
-// 功能函数
-import {
-  extend
-} from './util/Util';
+import $tools from './editor/toolbarHandle';
 
 /** 工具集合对象.  */
 import UTIL from './util/Util';

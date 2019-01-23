@@ -2,7 +2,7 @@ import UTIL from '../util/Util';
 import CONFIG from './config';
 import CM from './codemirror';
 
-const { toggleClass, addClass, removeClass } = UTIL;
+const { isMac, toggleClass, addClass, removeClass } = UTIL;
 const { gitGubUrl } = CONFIG;
 const { getState } = CM;
 
@@ -316,27 +316,6 @@ function commoFnHanlde (e) {
   return editor;
 }
 
-
-
-// Mapping of actions that can be bound to keyboard shortcuts or toolbar buttons
-// 绑定函数名
-// const bindings = {
-//   'toggleBold': toggleBold,
-//   'toggleItalic': toggleItalic,
-//   'toggleHeading': toggleHeading,
-//   'toggleBlockquote': toggleBlockquote,
-//   'toggleCodeBlock': toggleCodeBlock,
-//   'toggleUnorderedList': toggleUnorderedList,
-//   'toggleOrderedList': toggleOrderedList,
-//   'drawImage': drawImage,
-//   'drawLink': drawLink,
-//   'aboutEditor': aboutEditor,
-//   'openEdit': openEdit,
-//   'openCompare': openCompare,
-//   'openPreview': openPreview,
-//   'openFullScreen': openFullScreen
-// }
-
 // 按钮定义
 const toolbarBuiltInButtons = {
   'bold': {
@@ -476,11 +455,13 @@ const insertTexts = {
 	horizontalRule: ["", "\n\n-----\n\n"]
 }
 
+/** 远程的文字. */
 const promptTexts = {
 	link: "URL for the link:",
 	image: "URL of the image:"
 }
 
+/** Markdown 缩写 */
 const blockStyles = {
   "bold": "**",
 	"code": "```",
@@ -511,17 +492,16 @@ const shortcuts = {
  * @desc win: Ctrl; mac: Cmd
  */
 const fixShortcut = (name) => {
-  // if (isMac) {
-  //   name = name.replace('Ctrl', 'Cmd');
-  // } else {
-  //   name = name.replace('Cmd', 'Ctrl');
-  // }
-  // return name;
+  if (isMac) {
+    name = name.replace('Ctrl', 'Cmd');
+  } else {
+    name = name.replace('Cmd', 'Ctrl');
+  }
+  return name;
 }
 
 export default {
-  // bindings,
-
+  // 工具条图标、类名、回调函数等.
   toolbarBuiltInButtons,
 
   insertTexts,
@@ -530,8 +510,10 @@ export default {
 
   blockStyles,
 
+  // 快捷键
   shortcuts,
 
+  // Ctrl(Win OS) 还是 Cmd(Mac OS)
   fixShortcut,
 
 }
