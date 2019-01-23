@@ -1,6 +1,8 @@
 import UTIL from '../util/Util';
+import CONFIG from './config';
 
-const { toggleClass } = UTIL;
+const { toggleClass, addClass, removeClass } = UTIL;
+const { gitGubUrl } = CONFIG;
 
 let EDITOR = null;
 /**
@@ -75,41 +77,121 @@ const drawLink = (editor) => {
 /**
  * 打开仅编辑部分
  */
-const openEdit = (editor) => {
+const openEdit = (e) => {
+  e = e || window.event;
+  const self = e.currentTarget;
+  const editor = self.$editor;
 
+  if (!EDITOR) EDITOR = editor;
+  const isOnlyEdit = EDITOR.$status['isOnlyEdit'];
+
+  // 当前只显示编辑效果
+  if (isOnlyEdit) return;
+
+  EDITOR.$status['isOnlyEdit'] = true;
+  EDITOR.$status['isOnlyPreview'] = !EDITOR.$status['isOnlyEdit'];
+  EDITOR.$status['isShowAll'] = !EDITOR.$status['isOnlyEdit'];
+
+  toggleClass(self, 'active');
+
+  // 隐藏 `预览容器`，显示 `内容编辑容器`.
+  const editorEl = EDITOR._options.el;
+  const previewEl = editorEl.querySelector('.editor-preview');
+  const mdEl = editorEl.querySelector('.editor-md');
+  if (mdEl) removeClass(mdEl, 'hide');
+  if (previewEl) addClass(previewEl, 'hide');
+
+  // `只显示预览图标` 去掉激活状态.
+  const toolPreviewEl = editorEl.querySelector('.editor-tools').querySelector('.icon-eye');
+  const toolShowAllEl = editorEl.querySelector('.editor-tools').querySelector('.icon-columns');
+  if (toolPreviewEl) removeClass(toolPreviewEl, 'active');
+  if (toolShowAllEl) removeClass(toolShowAllEl, 'active');
 }
 
 /**
  * 打开编辑和预览.
  */
-const openCompare = (editor) => {
+const openCompare = (e) => {
+  e = e || window.event;
+  const self = e.currentTarget;
+  const editor = self.$editor;
 
+  if (!EDITOR) EDITOR = editor;
+  const isShowAll = EDITOR.$status['isShowAll'];
+  
+  // 当前只显示编辑效果
+  if (isShowAll) return;
+
+  EDITOR.$status['isShowAll'] = true;
+  EDITOR.$status['isOnlyPreview'] = !EDITOR.$status['isShowAll'];
+  EDITOR.$status['isOnlyEdit'] = !EDITOR.$status['isShowAll'];
+
+  toggleClass(self, 'active');
+
+  // 显示 `预览容器`，显示 `内容编辑容器`.
+  const editorEl = EDITOR._options.el;
+  const previewEl = editorEl.querySelector('.editor-preview');
+  const mdEl = editorEl.querySelector('.editor-md');
+  if (mdEl) removeClass(mdEl, 'hide');
+  if (previewEl) removeClass(previewEl, 'hide');
+
+  // 去掉 `编辑` `预览` 激活效果.
+  const toolEditEl = editorEl.querySelector('.editor-tools').querySelector('.icon-pen');
+  const toolPreviewEl = editorEl.querySelector('.editor-tools').querySelector('.icon-eye');
+  if (toolEditEl) removeClass(toolEditEl, 'active');
+  if (toolPreviewEl) removeClass(toolPreviewEl, 'active');
 }
 
 /**
  * 打开仅预览部分. 
  */
-const openPreview = (editor) => {
+const openPreview = (e) => {
+  e = e || window.event;
+  const self = e.currentTarget;
+  const editor = self.$editor;
 
+  if (!EDITOR) EDITOR = editor;
+  const isOnlyPreview = EDITOR.$status['isOnlyPreview'];
+
+  // 当前只显示预览视图.
+  if (isOnlyPreview) return;
+
+  EDITOR.$status['isOnlyPreview'] = true;
+  EDITOR.$status['isOnlyEdit'] = !EDITOR.$status['isOnlyPreview'];
+  EDITOR.$status['isShowAll'] = !EDITOR.$status['isOnlyPreview'];
+
+  toggleClass(self, 'active');
+
+  // 显示： `预览容器`，隐藏：`内容编辑容器`.
+  const editorEl = EDITOR._options.el;
+  const mdEl = editorEl.querySelector('.editor-md');
+  const previewEl = editorEl.querySelector('.editor-preview');
+  if (mdEl) addClass(mdEl, 'hide');
+  if (previewEl) removeClass(previewEl, 'hide');
+
+  // `只显示编辑图标` 去掉激活状态
+  const toolEditEl = editorEl.querySelector('.editor-tools').querySelector('.icon-pen');
+  const toolShowAllEl = editorEl.querySelector('.editor-tools').querySelector('.icon-columns');
+  if (toolEditEl) removeClass(toolEditEl, 'active');
+  if (toolShowAllEl) removeClass(toolShowAllEl, 'active');
 }
 
 /**
  * 全屏按钮点击处理回调. 
  */
 const openFullScreen = (e) => {
-  const editor = commoFnHanlde(e);
-  
-  if (!EDITOR) EDITOR = editor;
+  commoFnHanlde(e);
+
   const editorEl = EDITOR._options.el;
 
   toggleClass(editorEl, 'fullscreen');
 }
 
 /**
- * 关于编辑器. 
+ * `关于` 点击处理回调.
  */
-const aboutEditor = (editor) => {
-
+const aboutEditor = () => {
+  window.open(gitGubUrl);
 }
 
 /**
@@ -124,6 +206,8 @@ function commoFnHanlde (e) {
   const editor = self.$editor;
 
   toggleClass(self, 'active');
+
+  if (!EDITOR) EDITOR = editor;
 
   return editor;
 }

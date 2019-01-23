@@ -13,6 +13,9 @@
     height: 100%;
     overflow: hidden;
     overflow-y: scroll;
+    &.hide {
+      display: none;
+    }
   }
 }
 

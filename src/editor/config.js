@@ -3,6 +3,7 @@ import lang from './lang/en';
 const config = {
   /** 阿里图标连接 */
   iconLink: '//at.alicdn.com/t/font_823030_s1t6lzxnh1.css',
+  gitGubUrl: 'https://github.com/Jesonhu/cool-md-editor',
   editor: {
     /** 添加给`编辑器`顶级容器的样式类名 */
     className: {
