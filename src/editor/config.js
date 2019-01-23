@@ -1,6 +1,7 @@
 import lang from './lang/en';
 
 const config = {
+  baseUrl: 'https://www.github.com',
   /** 阿里图标连接 */
   iconLink: '//at.alicdn.com/t/font_823030_s1t6lzxnh1.css',
   gitGubUrl: 'https://github.com/Jesonhu/cool-md-editor',

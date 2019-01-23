@@ -3,7 +3,7 @@ import CONFIG from './config';
 import CM from './codemirror';
 
 const { isMac, toggleClass, addClass, removeClass } = UTIL;
-const { gitGubUrl } = CONFIG;
+const { baseUrl, gitGubUrl } = CONFIG;
 const { getState } = CM;
 
 
@@ -191,10 +191,53 @@ const toggleHeadingBigger = (e) => {
 // 标题相关 end =========================
 
 /**
- * Action for toggle Blockquote
+ * Action for toggle Blockquote.
+ * `引号` 处理功能
  */
 const toggleBlockquote = (e) => {
-  console.log('引号');
+  e = e || windowl.event;
+  const self = e.currentTarget;
+  const editor = self.$editor;
+  const cm = editor.$codemirror;
+
+  // 获取当前激活的类型
+  const type = self.getAttribute('data-name') || 'quote';
+  // 当前块对应的 markdown 类型.
+  const blockStyles = editor._options.$tools.blockStyles[type];
+  const stat = getState(cm);
+  let startChars = blockStyles;
+  let endChars = blockStyles;
+  let startPoint = cm.getCursor('start');
+  let endPoint = cm.getCursor('end');
+  const repl = {
+		"quote": /^(\s*)\>\s+/,
+		"unordered-list": /^(\s*)(\*|\-|\+)\s+/,
+		"ordered-list": /^(\s*)\d+\.\s+/
+	};
+	const map = {
+		"quote": "> ",
+		"unordered-list": "* ",
+		"ordered-list": "1. "
+  };
+  
+  for (let i = startPoint.line; i <= endPoint.line; i++) {
+    let text = cm.getLine(i);
+    if(stat[type]) {
+      text = text.replace(repl[type], '$1');
+    } else {
+      text = map[type] + text;
+    }
+
+    cm.replaceRange(text, {
+      line: i,
+      ch: 0
+    }, {
+      line: i,
+      ch: 99999999999999
+    });
+  }
+  cm.focus();
+
 }
 
 /**
@@ -205,31 +248,101 @@ const toggleCodeBlock = (editor) => {
 }
 
 /**
- * Action for toggle UnorderedList
+ * Action for toggle UnorderedList.
+ * `无序列表` 处理功能
  */
-const toggleUnorderedList = (editor) => {
-
+const toggleUnorderedList = (e) => {
+  toggleBlockquote(e);
 }
 
 /**
- * Action for toggleOrderedList
+ * Action for toggleOrderedList.
+ * `有序列表` 处理功能.
  */
-const toggleOrderedList = (editor) => {
-
+const toggleOrderedList = (e) => {
+  toggleBlockquote(e);
 }
 
 /**
- * Action for drawImage 
+ * Action for drawImage.
+ * `图片` 处理功能.
  */
-const drawImage = (editor) => {
+const drawImage = (e) => {
+  e = e || windowl.event;
+  const self = e.currentTarget;
+  const editor = self.$editor;
+  const cm = editor.$codemirror;
 
+  // 获取当前激活的类型
+  const type = self.getAttribute('data-name') || 'quote';
+
+  // 当前块对应的 markdown 类型.
+  const insertTexts = editor._options.$tools.insertTexts[type];
+
+  const stat = getState(cm);
+  let url = '';
+  
+  // url = prompt('请输入图片地址', '');
+  // if (!url) return false;
+  _replaceSelection(cm, stat.image, insertTexts, url);
 }
 
 /**
- * Action for drawLink 
+ * Action for drawLink.
+ * `链接` 处理功能.
  */
-const drawLink = (editor) => {
+const drawLink = (e) => {
+  e = e || windowl.event;
+  const self = e.currentTarget;
+  const editor = self.$editor;
+  const cm = editor.$codemirror;
 
+  // 获取当前激活的类型
+  const type = self.getAttribute('data-name') || 'quote';
+
+  // 当前块对应的 markdown 类型.
+  const insertTexts = editor._options.$tools.insertTexts[type];
+
+  const stat = getState(cm);
+  let url = '';
+  
+  // url = prompt('请输入链接', '');
+  // if (!url) return false;
+  _replaceSelection(cm, stat.link, insertTexts, url);
+}
+
+/**
+ * 图片和地址插入内容处理. 
+ */
+function _replaceSelection(cm, active, startEnd, url) {
+	var text;
+	var start = startEnd[0];
+	var end = startEnd[1];
+	var startPoint = cm.getCursor("start");
+	var endPoint = cm.getCursor("end");
+	// if(url) {
+  //   end = end.replace("#url#", url);
+  // }
+  end = end.replace("#url#", url);
+	if(active) {
+		text = cm.getLine(startPoint.line);
+		start = text.slice(0, startPoint.ch);
+		end = text.slice(startPoint.ch);
+		cm.replaceRange(start + end, {
+			line: startPoint.line,
+			ch: 0
+		});
+	} else {
+		text = cm.getSelection();
+    cm.replaceSelection(start + text + end);
+
+		startPoint.ch += start.length;
+		if(startPoint !== endPoint) {
+			endPoint.ch += start.length;
+		}
+	}
+	cm.setSelection(startPoint, endPoint);
+  cm.focus();
 }
 
 /**
