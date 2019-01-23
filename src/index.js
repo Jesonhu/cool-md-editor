@@ -413,7 +413,8 @@ class CoolMDEditor {
    * 获取 `CodeMirror` 的值.
    */
   getMDValue() {
-
+    const cm = this.$codemirror;
+    return cm.getValue();
   }
   /**
    * 设置 `CodeMirror` 的值. 

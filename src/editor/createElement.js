@@ -46,7 +46,6 @@ const domRender = {
   createToolsMain(icons) {
     const self = this;
     const toolsEdit = this.getToolsEdit(icons);
-    console.log('toolsEdit', toolsEdit);
     let htmlStr = '<div class="editor-tools-main">';
 
     // 循环创建图标
