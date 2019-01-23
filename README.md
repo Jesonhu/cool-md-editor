@@ -64,6 +64,11 @@ npm run devServer
 }
 ```
 
+#### 编辑器实例对象方法
+|方法名|说明|参数|返回值|
+|--|--|--|:--:|
+|getMDValue|获取当前Markdown的内容|-|当前Markdown的内容|
+
 
 ### 参考资料
 + [webpack4.x](https://github.com/Jesonhu/webpack4.x-demo)
