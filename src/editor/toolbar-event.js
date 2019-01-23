@@ -31,11 +31,10 @@ const toggleBold = (e) => {
   let text;
   let startChars = blockStyles;
   let endChars = blockStyles;
-  
+
   let startPoint = cm.getCursor('start');
   let endPoint = cm.getCursor('end');
-
-  console.log('类型', stat);
+  
   // 当前激活的类型
   if (stat[type]) {
     text = cm.getLine(startPoint.line);
