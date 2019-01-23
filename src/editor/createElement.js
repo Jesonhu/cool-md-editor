@@ -59,7 +59,6 @@ const domRender = {
         isThree = index > 0 && ((index + 1) % 3 === 0);
         if (isThree) {
           if (index !== (toolsEditLen - 1)) {
-            console.log(item);
             htmlStr = htmlStr + self.createToolsItem(item) + '<span class="editor-tools-division">|</span>';
           } else {
             htmlStr += self.createToolsItem(item);
