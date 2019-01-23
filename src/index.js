@@ -368,6 +368,7 @@ class CoolMDEditor {
   initCodeMirrorEvent() {
     this.add_CM_change_eventHandle();
     this.add_CM_cursorActivity_eventHandle();
+    this.addScrollSync();
   }
   /**
    * `CodeMirror` 内容变化事件监听.
@@ -445,6 +446,42 @@ class CoolMDEditor {
 
   // 编辑器 `preview` 容器相关 start ====================================
   // 编辑器 `preview` 容器相关 end ====================================
+
+  /**
+   * 滚动内容同步. 
+   */
+  addScrollSync() {
+    const cm = this.$codemirror;
+    const preview = this._options.el.querySelector('.editor-preview');
+
+    let cScroll = false;
+    let pScroll = false;
+    // Syncs scroll  editor -> preview
+    cm.on("scroll", function(v) {
+      if(cScroll) {
+        cScroll = false;
+        return;
+      }
+      pScroll = true;
+      var height = v.getScrollInfo().height - v.getScrollInfo().clientHeight;
+      var ratio = parseFloat(v.getScrollInfo().top) / height;
+      var move = (preview.scrollHeight - preview.clientHeight) * ratio;
+      preview.scrollTop = move;
+    });
+
+    // Syncs scroll  preview -> editor
+    preview.addEventListener('scroll', function() {
+      if(pScroll) {
+        pScroll = false;
+        return;
+      }
+      cScroll = true;
+      var height = preview.scrollHeight - preview.clientHeight;
+      var ratio = parseFloat(preview.scrollTop) / height;
+      var move = (cm.getScrollInfo().height - cm.getScrollInfo().clientHeight) * ratio;
+      cm.scrollTo(0, move);
+    });
+  }
 
   // 编辑器 `status` 容器相关 end ====================================
   updateStatusBar() {
