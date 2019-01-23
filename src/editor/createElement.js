@@ -1,3 +1,6 @@
+import TOOLS from './toolbarHandle';
+const { shortcuts, fixShortcut } = TOOLS;
+
 const domRender = {
   init(options) {
     this.initData(options);
@@ -150,7 +153,16 @@ const domRender = {
     return sortArr;
   },
   createToolsItem(config) {
-    return `<span class="${config.className}" title="${config.title}" data-name="${config.name}"></span>`;
+    const currShortcutsItem = shortcuts[config.name];
+    let currPlatShortcutsItem;
+    
+    if(currShortcutsItem) {
+      currPlatShortcutsItem = fixShortcut(currShortcutsItem)
+    } else {
+      currPlatShortcutsItem = '';
+    }
+
+    return `<span class="${config.className}" title="${config.title} (${currPlatShortcutsItem})" data-name="${config.name}"></span>`;
   },
   // 创建 Edit Tools end =========================
 

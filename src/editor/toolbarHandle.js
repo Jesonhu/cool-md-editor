@@ -193,8 +193,8 @@ const toggleHeadingBigger = (e) => {
 /**
  * Action for toggle Blockquote
  */
-const toggleBlockquote = (editor) => {
-
+const toggleBlockquote = (e) => {
+  console.log('引号');
 }
 
 /**
@@ -524,16 +524,17 @@ const blockStyles = {
 
 /** 快捷键 */
 const shortcuts = {
-  "toggleBold": "Cmd-B",
-	"toggleItalic": "Cmd-I",
-	"drawLink": "Cmd-K",
-	"toggleHeadingSmaller": "Cmd-H",
+  "bold": "Cmd-B",
+	"italic": "Cmd-I",
+	"link": "Cmd-K",
+  "heading": "Cmd-H",
+  "quote": "Cmd-'",
 	"toggleHeadingBigger": "Shift-Cmd-H",
 	"cleanBlock": "Cmd-E",
-	"drawImage": "Cmd-Alt-I",
+	"image": "Cmd-Alt-I",
 	"toggleBlockquote": "Cmd-'",
-	"toggleOrderedList": "Cmd-Alt-L",
-	"toggleUnorderedList": "Cmd-L",
+	"ordered-list": "Cmd-Alt-L",
+	"unordered-list": "Cmd-L",
 	"toggleCodeBlock": "Cmd-Alt-C",
 	"togglePreview": "Cmd-P",
 	"toggleSideBySide": "F9",
