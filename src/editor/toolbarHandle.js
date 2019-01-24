@@ -241,10 +241,54 @@ const toggleBlockquote = (e) => {
 }
 
 /**
- * Action for toggle code 
+ * Action for toggle code.
+ * `代码块` 处理功能.
  */
-const toggleCodeBlock = (editor) => {
+const toggleCodeBlock = (e) => {
+  e = e || windowl.event;
+  const self = e.currentTarget;
+  const editor = self.$editor;
+  const cm = editor.$codemirror;
 
+  // 获取当前激活的类型
+  const type = self.getAttribute('data-name') || 'code';
+  // 当前块对应的 markdown 类型.
+  const blockStyles = editor._options.$tools.blockStyles[type];
+  const stat = getState(cm);
+  // 插入内容
+  let text;
+  let startChars = blockStyles;
+  let endChars = blockStyles;
+
+  let startPoint = cm.getCursor('start');
+  let endPoint = cm.getCursor('end');
+
+  // 当前激活的类型
+  if (stat[type]) {
+    
+  } else { // 需要插入的内容
+    text = cm.getSelection();
+
+    if(type == "bold") {
+			text = text.split("**").join("");
+			text = text.split("__").join("");
+		} else if(type == "italic") {
+			text = text.split("*").join("");
+			text = text.split("_").join("");
+		} else if(type == "strikethrough") {
+			text = text.split("~~").join("");
+    } else if (type == "code") {
+      text = '\n\n';
+    }
+    cm.replaceSelection(startChars + text + endChars);
+
+    startPoint.ch += startChars.length;
+    endPoint.ch = startPoint.ch + text.length;
+  }
+
+  // cm.setSelection(startPoint, endPoint);
+  cm.setSelection(startPoint, startPoint);
+  cm.focus();
 }
 
 /**
