@@ -624,12 +624,4 @@ class CoolMDEditor {
 
 export default CoolMDEditor;
 
-// 使用
-const coolMDEditor = new CoolMDEditor({
-  el: document.getElementById('editor-wrap'),
-  defaultCon: '# 这是默认内容'
-});
-
-console.log('编辑器', coolMDEditor);
-
 

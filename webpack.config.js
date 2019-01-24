@@ -22,7 +22,8 @@ module.exports = {
   entry: './src/index.js',
 
   output: {
-    filename: '[name].js',
+    library: 'CoolMDEditor',
+    filename: 'coolMdEditor.js',
     path: path.resolve(__dirname, 'dist')
 
     // 关键在此项配置，需要配置为 "this", 默认为 "window"--至少在这里并没有什么用
@@ -41,13 +42,13 @@ module.exports = {
       template: "./src/index.html",
       filename: "./index.html"
     }),
-    // new OptimizeCss({
-    //   cssProcessor: require('cssnano')
-    // }),
+    new OptimizeCss({
+      cssProcessor: require('cssnano')
+    }),
     new MiniCssExtractPlugin({
       path: path.resolve(__dirname, 'dist'),
       // filename: "[name].[chunkhash:8].css",
-      filename: "main.css",
+      filename: "coolMdEditor.css",
       chunkFilename: "[id].css"
     })
   ],
