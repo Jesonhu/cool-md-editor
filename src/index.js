@@ -204,6 +204,7 @@ class CoolMDEditor {
         self.initEvent();
         self.initCodeMirrorData();
         self.initMarkdownData();
+        self.initDefaultContent();
       });
   }
 
@@ -400,7 +401,7 @@ class CoolMDEditor {
   commonCodeMirrorEventHandle(cm) {
     const content = cm.getValue();
     const editor = cm.$editor;
-    editor.setMDValue(content);
+    editor.setHtmlValue(content);
     editor.updateStatusBar(editor);
   }
   // 编辑器 `CodeMirror` 相关 end ====================================
@@ -427,6 +428,17 @@ class CoolMDEditor {
   }
   initMarkdownEvent() {
   }
+  /**
+   * Markdown 内容显示设置.
+   */
+  initDefaultContent() {
+    const defaultCon = this._options.defaultCon;
+    if (defaultCon) {
+      const cm = this.$codemirror;
+      cm.setValue(defaultCon);
+      this.commonCodeMirrorEventHandle(cm);
+    }
+  }
   /** 
    * 获取 `CodeMirror` 的值.
    */
@@ -437,7 +449,7 @@ class CoolMDEditor {
   /**
    * 设置 `CodeMirror` 的值. 
    */
-  setMDValue(mdValue) {
+  setHtmlValue(mdValue) {
     const htmlStr = this.$marked(mdValue);
     const htmlElement = this._options.el.querySelector('.editor-preview').querySelector('.preview-bd');
     htmlElement.innerHTML = htmlStr;
@@ -614,7 +626,8 @@ export default CoolMDEditor;
 
 // 使用
 const coolMDEditor = new CoolMDEditor({
-  el: document.getElementById('editor-wrap')
+  el: document.getElementById('editor-wrap'),
+  defaultCon: '# 这是默认内容'
 });
 
 console.log('编辑器', coolMDEditor);
