@@ -391,17 +391,17 @@ function _replaceSelection(cm, active, startEnd, url) {
 
 /**
  * Action for Back.
- * 返回一步. 
+ * 返回一步(撤销). 
  */
-const onGoBack = (e) => {
+const onUndo = (e) => {
   console.log('返回一步');
 }
 
 /**
  * Action for Front.
- * 前进一步.
+ * 前进一步(重做).
  */
-const onGoFront = (e) => {
+const onRedo = (e) => {
   console.log('前进一步');
 }
 
@@ -626,20 +626,20 @@ const toolbarBuiltInButtons = {
     index: 8,
     isEditTools: true
   },
-  'back': {
-    name: 'back',
+  'undo': {
+    name: 'undo',
     className: 'icon-goLeft',
-    action: onGoBack,
-    title: 'Go Back',
+    action: onUndo,
+    title: 'Undo',
     default: true,
     index: 9,
     isEditTools: true
   },
-  'front': {
-    name: 'front',
+  'redo': {
+    name: 'redo',
     className: 'icon-goRight',
-    action: onGoFront,
-    title: 'Go Front',
+    action: onRedo,
+    title: 'Redo',
     default: true,
     index: 10,
     isEditTools: true
