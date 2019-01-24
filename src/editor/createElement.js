@@ -189,7 +189,7 @@ const domRender = {
     return new Promise((resolve, reject) => {
       el.innerHTML += `
       <div class="editor-preview">
-        <div class="preview-bd">
+        <div class="preview-bd markdown-body">
         </div>
       </div>
       `;

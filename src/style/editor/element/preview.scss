@@ -16,6 +16,37 @@
     &.hide {
       display: none;
     }
+
+    // 个性化样式 start
+    .markdown-body {
+      min-height: 100%;
+      border:none;
+      h1, h2, h3, h4, h5, h6,
+      p,
+      ul, li {
+        & > code {
+          background-color: #F9F2F4;
+          color: #D02572;
+        }
+      }
+
+      a {
+        color: #0269c8;
+        border-bottom: 1px solid #d1e9ff;
+      }
+
+      pre {
+        border: solid 1px #dce6f0;
+        border-radius: .3rem;
+        background-color:#eee;
+      }
+
+      img {
+        max-width: 100%;
+        box-shadow: none;
+      }
+    }
+    // 个性化样式 end
   }
 }
 
