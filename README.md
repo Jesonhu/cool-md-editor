@@ -134,3 +134,4 @@ const coolMDEditor = new CoolMDEditor({
   + [simplemde-markdown-editor](https://github.com/sparksuite/simplemde-markdown-editor)
   + [surmon-china/angular-admin](https://github.com/surmon-china/angular-admin/blob/89ad805a7932c4e06560127bf8820640fc079584/src/app/components/saMarkdownEditor/markdownEditor.component.ts)
   + [codimd](https://demo.codimd.org/features?both)
+  + [md.editor](https://github.com/TeoChoi/md.editor)
