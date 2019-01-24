@@ -12,6 +12,26 @@ npm run devServer
 
 ### 说明
 
+#### 初始化参数说明
+```html
+<div class="cool-md-editor-wrap editor-theme-light" id="editor-wrap"></div>
+```
+
+Tips: 类名 `.cool-md-editor-wrap` 必须有, 主题: `.editor-theme-light` 和 `.editor-theme-dark` 选择一个.
+
+```js
+const coolMDEditor = new CoolMDEditor({
+  el: '编辑器容器',
+  defaultCon: '# 这是默认内容'
+});
+```
+
+|属性|类型|说明|默认值|可选值|
+|--|--|--|:--:|:--:|
+|`el`| htmlElement | 必需,编辑器dom元素| - | - |
+|`defaultCon`|String|非必需, 默认显示的内容| - | - |
+
+
 #### 编辑器实例对象属性
 
 |属性|类型|说明|默认值|可选值|
