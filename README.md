@@ -1,12 +1,49 @@
 # 使用 codemirror marked hightlight.js webpack 构建的编辑器
 
-### 期望功能
 
-### 命令
+### 常用命令
 ```bash
+# 安装依赖
+npm install
+
 # development: 开启 devServer 带有热更新的开发环境
 npm run devServer
+
+# product: 输出内容(生成 dist目录)
+npm run build
 ```
+
+### 使用方式
+
+Tips: 通过 `webpack` 导出为 `umd` 类型的文件。故支持以下几种方式.
+
+#### 方式1 script 标签使用
+
+```html
+<head>
+  ...
+  <link href="coolMdEditor.css" rel="stylesheet">
+</head>
+<body>
+  <div class="cool-md-editor-wrap editor-theme-light" id="editor-wrap1"></div>
+  <div class="cool-md-editor-wrap editor-theme-dark" id="editor-wrap2"></div>
+
+  <script src="coolMdEditor.js"></script>
+  <script>
+    const mdEditor1 = new CoolMDEditor.default({
+      el: document.getElementById('editor-wrap1'),
+      defaultCon: '# 这是默认内容(可以不要)'
+    });
+
+    const mdEditor2 = new CoolMDEditor.default({
+      el: document.getElementById('editor-wrap2'),
+      defaultCon: '# 这是默认内容(可以不要)'
+    });
+  </script>
+</body>
+```
+
+
 
 ### [结构梳理](https://www.processon.com/view/link/5b88dc49e4b0534c9bc51b33)
 
