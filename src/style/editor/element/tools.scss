@@ -72,6 +72,13 @@
       }
     }
     .editor-tools-main {
+      span[data-name="back"],
+      span[data-name="front"] {
+        color: lighten($themeLight, 10);
+        &.canActive {
+          color: darken($themeLight, 70);
+        }
+      }
       .editor-tools-division {
         color: darken($themeLight, 30);
       }
@@ -94,6 +101,13 @@
       }
     }
     .editor-tools-main {
+      span[data-name="back"],
+      span[data-name="front"] {
+        color: lighten($themeDark, 10);
+        &.canActive {
+          color: lighten($themeDark, 70);
+        }
+      }
       .editor-tools-division {
         color: lighten($themeDark, 30);
       }

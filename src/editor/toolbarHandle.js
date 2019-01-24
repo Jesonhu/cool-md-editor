@@ -390,6 +390,22 @@ function _replaceSelection(cm, active, startEnd, url) {
 }
 
 /**
+ * Action for Back.
+ * 返回一步. 
+ */
+const onGoBack = (e) => {
+  console.log('返回一步');
+}
+
+/**
+ * Action for Front.
+ * 前进一步.
+ */
+const onGoFront = (e) => {
+  console.log('前进一步');
+}
+
+/**
  * 仅显示编辑部分
  */
 const openEdit = (e) => {
@@ -610,6 +626,24 @@ const toolbarBuiltInButtons = {
     index: 8,
     isEditTools: true
   },
+  'back': {
+    name: 'back',
+    className: 'icon-goLeft',
+    action: onGoBack,
+    title: 'Go Back',
+    default: true,
+    index: 9,
+    isEditTools: true
+  },
+  'front': {
+    name: 'front',
+    className: 'icon-goRight',
+    action: onGoFront,
+    title: 'Go Front',
+    default: true,
+    index: 10,
+    isEditTools: true
+  },
   'about': {
     name: 'about',
     className: 'icon-question',
@@ -688,7 +722,9 @@ const shortcuts = {
   "quote": "Cmd-'",
 	"toggleHeadingBigger": "Shift-Cmd-H",
 	"cleanBlock": "Cmd-E",
-	"image": "Cmd-Alt-I",
+  "image": "Cmd-Alt-I",
+  "back": "Cmd-Z",
+  "front": "Cmd-Y",
 	"toggleBlockquote": "Cmd-'",
 	"ordered-list": "Cmd-Alt-L",
 	"unordered-list": "Cmd-L",
