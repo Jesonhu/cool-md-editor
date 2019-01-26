@@ -1,7 +1,7 @@
 {
   "name": "cool-md-editor",
   "version": "1.1.0",
-  "description": "A markedown editor width webpack",
+  "description": "a markedown editor width webpack & codemirror & marked & highlight",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
@@ -10,7 +10,14 @@
     "build": "webpack --mode=production"
   },
   "keywords": [],
-  "author": "",
+  "author": "Jesonhu",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Jesonhu/cool-md-editor.git"
+  },
+  "bugs": {
+    "url": "https://github.com/Jesonhu/cool-md-editor/issues"
+  },
   "license": "MIT",
   "devDependencies": {
     "autoprefixer": "^9.1.3",
