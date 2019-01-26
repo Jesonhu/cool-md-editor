@@ -1,5 +1,5 @@
 {
-  "name": "cmarkedown-editor",
+  "name": "cool-md-editor",
   "version": "1.0.0",
   "description": "A markedown editor width webpack",
   "main": "index.js",
