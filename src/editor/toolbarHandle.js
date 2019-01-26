@@ -394,7 +394,17 @@ function _replaceSelection(cm, active, startEnd, url) {
  * 返回一步(撤销). 
  */
 const onUndo = (e) => {
-  console.log('返回一步');
+  e = e || window.event;
+  const self = e.currentTarget;
+  const editor = self.$editor;
+
+  if (!EDITOR) EDITOR = editor;
+
+  const cm = editor.$codemirror;
+  if (cm) {
+    console.log('回退');
+    cm.undo();
+  }
 }
 
 /**
