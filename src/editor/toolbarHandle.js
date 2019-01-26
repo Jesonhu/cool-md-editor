@@ -402,8 +402,9 @@ const onUndo = (e) => {
 
   const cm = editor.$codemirror;
   if (cm) {
-    console.log('回退');
-    cm.undo();
+    const history = cm.getHistory();
+    console.log('回退', history);
+    cm.undoSelection();
   }
 }
 
@@ -412,7 +413,18 @@ const onUndo = (e) => {
  * 前进一步(重做).
  */
 const onRedo = (e) => {
-  console.log('前进一步');
+  e = e || window.event;
+  const self = e.currentTarget;
+  const editor = self.$editor;
+
+  if (!EDITOR) EDITOR = editor;
+
+  const cm = editor.$codemirror;
+  if (cm) {
+    const history = cm.getHistory();
+    console.log('取消撤销', history);
+    cm.redoSelection();
+  }
 }
 
 /**
