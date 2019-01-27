@@ -622,7 +622,19 @@ class CoolMDEditor {
   }
 }
 
-export default CoolMDEditor;
+// export default CoolMDEditor;
+
+// 模块导出
+if (typeof define === 'function' && typeof define.amd === 'object' && define.amd) {
+  // AMD. Register as an anonymous module.
+  define(function() {
+    return CoolMDEditor;
+  });
+} else if (typeof module !== 'undefined' && module.exports) {
+  module.exports = CoolMDEditor;
+} else {
+  window.CoolMDEditor = CoolMDEditor;
+}
 
 
 // new CoolMDEditor({
