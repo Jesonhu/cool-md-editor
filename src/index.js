@@ -625,9 +625,9 @@ class CoolMDEditor {
 export default CoolMDEditor;
 
 
-new CoolMDEditor({
-  el: document.getElementById('editor-wrap'),
-  defaultCon: '# 这是默认内容'
-})
+// new CoolMDEditor({
+//   el: document.getElementById('editor-wrap'),
+//   defaultCon: '# 这是默认内容'
+// })
 
 
