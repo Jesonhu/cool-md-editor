@@ -44,8 +44,23 @@ Tips: 通过 `webpack` 导出为 `umd` 类型的文件。故支持以下几种�
 ```
 
 
+#### 方式2 npm
+```cmd
+npm i cool-md-editor --save
+```
 
-### [结构梳理](https://www.processon.com/view/link/5b88dc49e4b0534c9bc51b33)
+```js
+const MdEditor = require('cool-md-editor');
+require('cool-md-editor/dist/coolMdEditor.css');
+
+new MdEditor({
+  el: document.getElementById('editor-wrap'),
+  defaultCon: '# 这是默认内容,任意填写'
+});
+```
+
+
+<!-- ### [结构梳理](https://www.processon.com/view/link/5b88dc49e4b0534c9bc51b33) -->
 
 ### 说明
 
