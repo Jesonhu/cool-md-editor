@@ -23,6 +23,7 @@ module.exports = {
 
   output: {
     library: 'CoolMDEditor',
+    libraryTarget: 'umd',
     filename: 'coolMdEditor.js',
     path: path.resolve(__dirname, 'dist')
 
