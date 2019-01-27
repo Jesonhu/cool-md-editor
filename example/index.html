@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Cool-MD-Editor</title>
+  <style>
+    html,
+    body {
+      width:100%;
+      height:100%;
+    }
+    .wrap {
+      width: 80%;
+      height: 600px;
+      padding: 50px;
+      margin: 0 auto;
+    }
+  </style>
+<link href="coolMdEditor.css" rel="stylesheet"></head>
+<body>
+  <div class="wrap">
+    <div class="cool-md-editor-wrap editor-theme-light" id="editor-wrap"></div>
+  </div>
+<script type="text/javascript" src="coolMdEditor.js"></script>
+<script>
+  new CoolMDEditor({
+    el: document.getElementById('editor-wrap')
+  })
+</script>
+</body>
+</html>
