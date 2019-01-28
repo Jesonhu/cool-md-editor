@@ -18,7 +18,9 @@ npm run build
 Tips: 通过 `webpack` 导出为 `umd` 类型的文件。故支持以下几种方式.
 
 #### 方式1 script 标签使用
-
+CDN:
++ CSS: https://unpkg.com/cool-md-editor@版本号/dist/coolMdEditor.css
++ JS: https://unpkg.com/cool-md-editor@版本号/dist/coolMdEditor.js
 ```html
 <head>
   ...
