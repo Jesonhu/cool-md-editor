@@ -1,6 +1,6 @@
 {
   "name": "cool-md-editor",
-  "version": "1.2.0",
+  "version": "1.2.1",
   "description": "a markedown editor width webpack & codemirror & marked & highlight",
   "main": "dist/coolMdEditor.js",
   "unpkg": "dist/coolMdEditor.js",
