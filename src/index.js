@@ -241,16 +241,18 @@ class CMdEditor {
       lang: 'zh',
       // ========== 七牛 ==========
       qiniu: {
-        tokenApiUrl: 'http://127.0.0.1:3001/api/qiniu/blog/get_token',
+        tokenApiUrl: 'http://127.0.0.1:3001/api/qiniu/test/get_token',
         region: 'z1',
         config: {},
         putExtra: {}
       }
     }
-    Object.assign(defaultOptions, options);
-    this._options = defaultOptions;
+    // Object.assign(defaultOptions, options);
+    // this._options = defaultOptions;
+    this._options = UTIL.extend({}, defaultOptions, options);
     this._options.$tools = $tools;
     const _options = this._options;
+    console.log(this._options);
 
     // 默认语言处理.
     if (typeof _options.lang === 'string') {
