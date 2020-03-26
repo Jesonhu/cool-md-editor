@@ -2,7 +2,7 @@
 
 [live-demo](http://demo.easysolves.com/sites/editor/test.html)
 
-[![Preview](//qiniu.easysolves.com/Fmd-5pRwmrfyQuYDZXIMM5tAZE4R)](http://demo.easysolves.com/sites/editor/test.html)
+![](//qiniu.easysolves.com/Fmd-5pRwmrfyQuYDZXIMM5tAZE4R)
 
 ### 常用命令
 ```bash
