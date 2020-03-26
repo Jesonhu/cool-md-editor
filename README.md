@@ -3,6 +3,8 @@
 [live-demo](http://demo.easysolves.com/sites/editor/test.html)
 [中文文档](./README_zh-CN.md)
 
+[![Preview](//qiniu.easysolves.com/Fmd-5pRwmrfyQuYDZXIMM5tAZE4R)](http://demo.easysolves.com/sites/editor/test.html)
+
 ### command
 
 ```bash
