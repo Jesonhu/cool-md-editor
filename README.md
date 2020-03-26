@@ -1,15 +1,16 @@
 # A Markdown Editor build with codemirror & marked & hightlight.js & webpack 
 
-[live-demo](https://editor.easysolves.com/)
+[live-demo](http://demo.easysolves.com/sites/editor/test.html)
 [中文文档](./README_zh-CN.md)
 
 ### command
+
 ```bash
 # install dependency
 npm install
 
 # development: open devServer with HMR
-npm run devServer
+npm run dev
 
 # product: build project
 npm run build
@@ -20,28 +21,31 @@ npm run build
 Tips: the code ouput type is `umd`. so you can use some way. in the below
 
 #### Method 1:  `<script>` Element 
+
 CDN:
-+ CSS: https://unpkg.com/cool-md-editor@version/dist/coolMdEditor.css
-+ JS: https://unpkg.com/cool-md-editor@version/dist/coolMdEditor.js
+
++ CSS: https://unpkg.com/cool-md-editor@version/dist/cMdEditor.css
++ JS: https://unpkg.com/cool-md-editor@version/dist/cMdEditor.js
 
 example
+
 ```html
 <head>
   ...
-  <link href="coolMdEditor.css" rel="stylesheet">
+  <link href="cMdEditor.css" rel="stylesheet">
 </head>
 <body>
   <div class="cool-md-editor-wrap editor-theme-light" id="editor-wrap1"></div>
   <div class="cool-md-editor-wrap editor-theme-dark" id="editor-wrap2"></div>
 
-  <script src="coolMdEditor.js"></script>
+  <script src="cMdEditor.js"></script>
   <script>
-    const mdEditor1 = new CoolMDEditor.default({
+    const mdEditor1 = new CMdEditor.default({
       el: document.getElementById('editor-wrap1'),
       defaultCon: '# default content (selectable)'
     });
 
-    const mdEditor2 = new CoolMDEditor.default({
+    const mdEditor2 = new CMdEditor.default({
       el: document.getElementById('editor-wrap2'),
       defaultCon: '# default content (selectable)'
     });
@@ -50,14 +54,15 @@ example
 ```
 
 
-#### Method 2: npm
+#### Method 2: NPM
+
 ```cmd
 npm i cool-md-editor --save
 ```
 
 ```js
 const MdEditor = require('cool-md-editor');
-require('cool-md-editor/dist/coolMdEditor.css');
+require('cool-md-editor/dist/cMdEditor.css');
 
 new MdEditor({
   el: document.getElementById('editor-wrap'),
@@ -78,7 +83,7 @@ new MdEditor({
 Tips: className `.cool-md-editor-wrap` required, Theme: `.editor-theme-light` & `.editor-theme-dark` .
 
 ```js
-const coolMDEditor = new CoolMDEditor({
+const coolMDEditor = new CMdEditor({
   el: editor Element,
   defaultCon: '# default content (selectable)'
 });
