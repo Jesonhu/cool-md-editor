@@ -1,6 +1,6 @@
 # 使用 codemirror marked hightlight.js webpack 构建的编辑器
 
-[live-demo](https://editor.easysolves.com/)
+[live-demo](http://demo.easysolves.com/sites/editor/test.html)
 
 
 ### 常用命令
@@ -22,26 +22,27 @@ Tips: 导出为 `umd` 类型的文件。支持以下几种使用方式.
 #### 方式1 script 标签使用
 
 CDN:
-+ CSS: https://unpkg.com/cool-md-editor@版本号/dist/coolMdEditor.css
-+ JS: https://unpkg.com/cool-md-editor@版本号/dist/coolMdEditor.js
+
++ CSS: https://unpkg.com/cool-md-editor@<版本号>/dist/cMdEditor.css
++ JS: https://unpkg.com/cool-md-editor@<版本号>/dist/cMdEditor.js
 
 ```html
 <head>
   ...
-  <link href="coolMdEditor.css" rel="stylesheet">
+  <link href="cMdEditor.css" rel="stylesheet">
 </head>
 <body>
   <div class="cool-md-editor-wrap editor-theme-light" id="editor-wrap1"></div>
   <div class="cool-md-editor-wrap editor-theme-dark" id="editor-wrap2"></div>
 
-  <script src="coolMdEditor.js"></script>
+  <script src="cMdEditor.js"></script>
   <script>
-    const mdEditor1 = new CoolMDEditor.default({
+    const mdEditor1 = new CMdEditor.default({
       el: document.getElementById('editor-wrap1'),
       defaultCon: '# 这是默认内容(可以不要)'
     });
 
-    const mdEditor2 = new CoolMDEditor.default({
+    const mdEditor2 = new CMdEditor.default({
       el: document.getElementById('editor-wrap2'),
       defaultCon: '# 这是默认内容(可以不要)'
     });
@@ -56,10 +57,10 @@ npm i cool-md-editor --save
 ```
 
 ```js
-const MdEditor = require('cool-md-editor');
-require('cool-md-editor/dist/coolMdEditor.css');
+const CMdEditor = require('cool-md-editor');
+require('cool-md-editor/dist/cMdEditor.css');
 
-new MdEditor({
+new CMdEditor({
   el: document.getElementById('editor-wrap'),
   defaultCon: '# 这是默认内容,任意填写'
 });
@@ -78,7 +79,7 @@ new MdEditor({
 Tips: 类名 `.cool-md-editor-wrap` 必须有, 主题: `.editor-theme-light` 和 `.editor-theme-dark` 选择一个.
 
 ```js
-const coolMDEditor = new CoolMDEditor({
+const coolMDEditor = new CMdEditor({
   el: '编辑器容器',
   defaultCon: '# 这是默认内容'
 });
@@ -88,6 +89,9 @@ const coolMDEditor = new CoolMDEditor({
 |--|--|--|:--:|:--:|
 |`el`| htmlElement | 必需,编辑器dom元素| - | - |
 |`defaultCon`|String|非必需, 默认显示的内容| - | - |
+| `lang` | Object/String | 编辑器的语言内容 | - | - |
+|`shortcuts`| Object | 快捷键配置, 具体请看 `_options` 说明 | - | -|
+|`qiniu`| Object | 七牛云配置，图片复制粘贴后上传到七牛云, 具体请看 `_options` 说明 | - | -|
 
 
 #### 编辑器实例对象属性
@@ -121,7 +125,7 @@ const coolMDEditor = new CoolMDEditor({
 | `isThemeLight` | Boolean | 是否主题为`圣光`, 目前只有 `圣光` 和 `暗黑` 主题 ，根据 `base16` 扩展而来。未来也只考虑两套主题(光/暗) | true 或者本地存储设置值| - |
 | `isShowAll` | Boolean |编辑和预览都显示, 与 `isOnlyEdit` `isOnlyPreview`为正反关系 |true | - |
 | `isOnlyPreview` | Boolean |只显示预览 |false | - |
-| `isOnlyEdit` | Boolean | 只显示编辑|true | - |
+| `isOnlyEdit` | Boolean | 只显示编辑|false | - |
 
 #### `_options` 属性
 
@@ -136,7 +140,7 @@ const coolMDEditor = new CoolMDEditor({
 
 
 
-+ $tools 结构
++ `$tools` 结构
 
 ```js
 {
@@ -150,20 +154,20 @@ const coolMDEditor = new CoolMDEditor({
 }
 ```
 
-+ lang
++ `lang`
 
 类型-字符串: 使用内置的语言，目前内置了 `en: englisth` `zh: 简体中文`, 具体配置可查看 `lang/*` 目录中的配置。
 
 类型-对象: 可以扩展第三方语言，具体配置格式可查看 `lang/*` 目录文件。
 
-+ qiniu
++ `qiniu`
 
 需要使用粘贴图片功能，要先引用 `https://unpkg.com/qiniu-js@<版本号>/dist/qiniu.min.js`。粘贴的图片转换为了 base64 格式，为了避免图片路径显示 base64 格式的字符串，造成内容过多问题。编辑器内置了将 base64 格式的图片上传至七牛云存储的功能。
 
 默认配置为
 ```js
 qiniu: {
-    tokenApiUrl: 'http://127.0.0.1:3001/api/qiniu/blog/get_token',
+    tokenApiUrl: 'http://127.0.0.1:3001/api/qiniu/test/get_token',
     region: 'z1',
     config: {},
     putExtra: {}
