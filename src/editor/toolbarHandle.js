@@ -3,13 +3,16 @@ import CONFIG from './config';
 import CM from './codemirror';
 
 const { isMac, toggleClass, addClass, removeClass } = UTIL;
-const { baseUrl, gitGubUrl } = CONFIG;
+const { gitGubUrl } = CONFIG;
 const { getState } = CM;
 
 
 let EDITOR = null;
+
 /**
- * 工具栏功能
+ * ========================================
+ * 工具栏图标功能处理函数 
+ * ========================================
  */
 
  /** 
@@ -130,7 +133,7 @@ const toggleItalic = (e) => {
   cm.focus();
 }
 
-// 标题相关 start =========================
+// ========== 标题相关 ==========
 /**
  * Action for toggle Heading.
  * `标题` 图标处理功能
@@ -176,19 +179,14 @@ const toggleHeading = (e) => {
  * Action for toggling heading size: normal -> h1 -> h2 -> h3 -> h4 -> h5 -> h6 -> normal
  * `小标题` 处理功能
  */
-const toggleHeadingSmaller = (e) => {
-
-}
+const toggleHeadingSmaller = (e) => {}
 
 /**
  * Action for toggling heading size: normal -> h6 -> h5 -> h4 -> h3 -> h2 -> h1 -> normal
  * `大标题` 处理功能
  */
-const toggleHeadingBigger = (e) => {
-  
-}
+const toggleHeadingBigger = (e) => {}
 
-// 标题相关 end =========================
 
 /**
  * Action for toggle Blockquote.
@@ -308,8 +306,7 @@ const toggleOrderedList = (e) => {
 }
 
 /**
- * Action for drawImage.
- * `图片` 处理功能.
+ * 插入图片.
  */
 const drawImage = (e) => {
   e = e || windowl.event;
@@ -326,14 +323,13 @@ const drawImage = (e) => {
   const stat = getState(cm);
   let url = '';
   
-  // url = prompt('请输入图片地址', '');
-  // if (!url) return false;
+  url = prompt('请输入图片地址', '');
+  if (!url) return false;
   _replaceSelection(cm, stat.image, insertTexts, url);
 }
 
 /**
- * Action for drawLink.
- * `链接` 处理功能.
+ * 插入链接.
  */
 const drawLink = (e) => {
   e = e || windowl.event;
@@ -355,39 +351,6 @@ const drawLink = (e) => {
   _replaceSelection(cm, stat.link, insertTexts, url);
 }
 
-/**
- * 图片和地址插入内容处理. 
- */
-function _replaceSelection(cm, active, startEnd, url) {
-	var text;
-	var start = startEnd[0];
-	var end = startEnd[1];
-	var startPoint = cm.getCursor("start");
-	var endPoint = cm.getCursor("end");
-	// if(url) {
-  //   end = end.replace("#url#", url);
-  // }
-  end = end.replace("#url#", url);
-	if(active) {
-		text = cm.getLine(startPoint.line);
-		start = text.slice(0, startPoint.ch);
-		end = text.slice(startPoint.ch);
-		cm.replaceRange(start + end, {
-			line: startPoint.line,
-			ch: 0
-		});
-	} else {
-		text = cm.getSelection();
-    cm.replaceSelection(start + text + end);
-
-		startPoint.ch += start.length;
-		if(startPoint !== endPoint) {
-			endPoint.ch += start.length;
-		}
-	}
-	cm.setSelection(startPoint, endPoint);
-  cm.focus();
-}
 
 /**
  * Action for Back.
@@ -472,7 +435,7 @@ const openCompare = (e) => {
   if (!EDITOR) EDITOR = editor;
   const isShowAll = EDITOR.$status['isShowAll'];
 
-  // 当前只显示编辑效果
+  // 已经激活再次点击不进行处理.
   if (isShowAll) return;
 
   EDITOR.$status['isShowAll'] = true;
@@ -533,7 +496,7 @@ const openPreview = (e) => {
  * 全屏按钮点击处理回调. 
  */
 const openFullScreen = (e) => {
-  commoFnHanlde(e);
+  commonAction(e);
 
   const editorEl = EDITOR._options.el;
 
@@ -548,12 +511,46 @@ const aboutEditor = () => {
 }
 
 /**
+ * 图片和地址插入内容处理. 
+ */
+function _replaceSelection(cm, active, startEnd, url) {
+	var text;
+	var start = startEnd[0];
+	var end = startEnd[1];
+	var startPoint = cm.getCursor("start");
+	var endPoint = cm.getCursor("end");
+	// if(url) {
+  //   end = end.replace("#url#", url);
+  // }
+  end = end.replace("#url#", url);
+	if(active) {
+		text = cm.getLine(startPoint.line);
+		start = text.slice(0, startPoint.ch);
+		end = text.slice(startPoint.ch);
+		cm.replaceRange(start + end, {
+			line: startPoint.line,
+			ch: 0
+		});
+	} else {
+		text = cm.getSelection();
+    cm.replaceSelection(start + text + end);
+
+		startPoint.ch += start.length;
+		if(startPoint !== endPoint) {
+			endPoint.ch += start.length;
+		}
+	}
+	cm.setSelection(startPoint, endPoint);
+  cm.focus();
+}
+
+/**
  * Tools 图标点击回调处理函数中相同的处理部分. 
  * 
  * @param {Object} e 触发图标对应回调的事件对象.
  * @return {Object} editor 编辑器实例对象.
  */
-function commoFnHanlde (e) {
+function commonAction (e) {
   e = e || window.event;
   const self = e.currentTarget;
   const editor = self.$editor;
@@ -565,7 +562,21 @@ function commoFnHanlde (e) {
   return editor;
 }
 
-// 按钮定义
+
+/**
+ * ========================================
+ * 工具按钮定义集合.
+ * 
+ * `item.name`               按钮名
+ * `item.action`             处理函数
+ * `item.className`          图标名
+ * `item.title`              hover 标题
+ * `item.default`            默认定义的
+ * `item.index`              放置的顺序，越小越靠前
+ * `item.isEditTools`        是否为内容编辑图标。
+ *                           工具栏图标分两大类: 1. 内容编辑工具图标，2. 预览及布局设置工具图标
+ * ========================================
+ */
 const toolbarBuiltInButtons = {
   'bold': {
     name: 'bold',
@@ -686,7 +697,7 @@ const toolbarBuiltInButtons = {
   },
   'compare': {
     name: 'compare',
-    className: 'icon-columns',
+    className: 'icon-columns' + ' active',
     action: openCompare,
     title: 'Toggle Compare',
     default: true,
@@ -714,7 +725,11 @@ const toolbarBuiltInButtons = {
 
 }
 
-/** 格式 */
+/**
+ * ========================================
+ * Markdown 格式模板.
+ * ========================================
+ */
 const insertTexts = {
   link: ["[", "](#url#)"],
 	image: ["![](", "#url#)"],
@@ -722,20 +737,32 @@ const insertTexts = {
 	horizontalRule: ["", "\n\n-----\n\n"]
 }
 
-/** 远程的文字. */
+/**
+ * ========================================
+ * 远程默认的文字.
+ * ========================================
+ */
 const promptTexts = {
 	link: "URL for the link:",
 	image: "URL of the image:"
 }
 
-/** Markdown 缩写 */
+/**
+ * ========================================
+ * Markdown 块级格式模板.
+ * ========================================
+ */
 const blockStyles = {
   "bold": "**",
 	"code": "```",
 	"italic": "*"
 }
 
-/** 快捷键 */
+/**
+ * ========================================
+ * 快捷键按键说明文字.
+ * ========================================
+ */
 const shortcuts = {
   "bold": "Cmd-B",
 	"italic": "Cmd-I",
@@ -757,7 +784,7 @@ const shortcuts = {
 }
 
 /**
- * 快捷键针对不同系统做兼容处理.
+ * win 和 Mac 快捷键兼容处理功能函数
  * @param {objet} name 
  * @desc win: Ctrl; mac: Cmd
  */
@@ -771,7 +798,6 @@ const fixShortcut = (name) => {
 }
 
 export default {
-  // 工具条图标、类名、回调函数等.
   toolbarBuiltInButtons,
 
   insertTexts,
@@ -780,10 +806,7 @@ export default {
 
   blockStyles,
 
-  // 快捷键
   shortcuts,
 
-  // Ctrl(Win OS) 还是 Cmd(Mac OS)
-  fixShortcut,
-
+  fixShortcut
 }

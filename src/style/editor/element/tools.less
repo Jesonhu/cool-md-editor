@@ -1,0 +1,117 @@
+//========================================
+// 编辑器 `工具条` 样式.
+//
+// @update 2019/1/18
+// @author Jesonhu(github)
+// @email jesonhu_web@163.com
+//========================================
+
+.cool-md-editor-wrap {
+  .editor-tools {
+    position: absolute;
+    left:0;
+    top:0;
+    width:100%;
+    height: 50px;
+    display: flex;
+    padding:0 10px;
+
+    /* 编辑器图标样式 start */
+    .editor-tools-main,
+    .editor-tools-handle {
+      display:flex;
+      height: 100%;
+      align-items: center;
+      flex-wrap:wrap;
+      & > * {
+        width:30px;
+        height:30px;
+        text-align: center;
+        line-height: 30px;
+        box-sizing:border-box;
+        border:1px solid transparent;
+        border-radius:3px;
+        margin-left:3px;
+        
+        &:hover {
+          cursor: pointer;
+        }
+      }
+    }
+    .editor-tools-main {
+      flex: 70%;
+      .editor-tools-division {
+        width:13px;
+        height: 30px;
+        line-height: 25px;
+        text-align: center;
+        border:none;
+        margin:0;
+        cursor: auto;
+      }
+    }
+    .editor-tools-handle {
+      flex: 30%;
+      justify-content: flex-end;
+    }
+    /* 编辑器图标样式 end */
+  }
+}
+
+// `圣光主题`
+.editor-theme-light {
+  .editor-tools {
+    background-color:@themeLight;
+
+    /* 编辑器图标样式 start */
+    .editor-tools-main > *,
+    .editor-tools-handle > * {
+      color:  darken(@themeLight, 70);
+      &.active {
+        border-color: darken(@themeLight, 70);
+      }
+    }
+    .editor-tools-main {
+      span[data-name="undo"],
+      span[data-name="redo"] {
+        color: lighten(@themeLight, 10);
+        &.canActive {
+          color: darken(@themeLight, 70);
+        }
+      }
+      .editor-tools-division {
+        color: darken(@themeLight, 30);
+      }
+    }
+    /* 编辑器图标样式 end */
+  }
+}
+
+// `暗黑主题`
+.editor-theme-dark {
+  .editor-tools {
+    background-color:@themeDark;
+
+    /* 编辑器图标样式 start */
+    .editor-tools-main > *,
+    .editor-tools-handle > * {
+      color: lighten(@themeDark, 70);
+      &.active {
+        border-color: lighten(@themeDark, 70);
+      }
+    }
+    .editor-tools-main {
+      span[data-name="undo"],
+      span[data-name="redo"] {
+        color: lighten(@themeDark, 10);
+        &.canActive {
+          color: lighten(@themeDark, 70);
+        }
+      }
+      .editor-tools-division {
+        color: lighten(@themeDark, 30);
+      }
+    }
+    /* 编辑器图标样式 end */
+  }
+}

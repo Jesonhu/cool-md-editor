@@ -1,13 +1,12 @@
 {
   "name": "cool-md-editor",
-  "version": "1.2.1",
+  "version": "1.3.0",
   "description": "a markedown editor width webpack & codemirror & marked & highlight",
-  "main": "dist/coolMdEditor.js",
-  "unpkg": "dist/coolMdEditor.js",
+  "main": "dist/cMDEditor.js",
+  "unpkg": "dist/cMDEditor.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "devServer": "webpack-dev-server --open --progress --colors",
-    "dev": "webpack --mode=development",
+    "dev": "webpack-dev-server --open --progress --colors",
     "build": "webpack --mode=production"
   },
   "keywords": [],
@@ -20,6 +19,12 @@
     "url": "https://github.com/Jesonhu/cool-md-editor/issues"
   },
   "license": "MIT",
+  "dependencies": {
+    "codemirror": "^5.40.0",
+    "highlight.js": "^9.12.0",
+    "lodash-es": "^4.17.15",
+    "marked": "^0.5.0"
+  },
   "devDependencies": {
     "autoprefixer": "^9.1.3",
     "babel-core": "^6.26.0",
@@ -30,21 +35,17 @@
     "css-loader": "^1.0.0",
     "cssnano": "^4.1.0",
     "html-webpack-plugin": "^3.2.0",
+    "less": "^3.11.1",
+    "less-loader": "^5.0.0",
     "mini-css-extract-plugin": "^0.4.2",
-    "node-sass": "^4.9.3",
     "optimize-css-assets-webpack-plugin": "^5.0.1",
     "postcss-loader": "^3.0.0",
-    "sass-loader": "^7.1.0",
-    "scss": "^0.2.4",
-    "scss-loader": "0.0.1",
     "style-loader": "^0.23.0",
     "webpack": "^4.17.1",
     "webpack-cli": "^3.1.0",
     "webpack-dev-server": "^3.1.14"
   },
-  "dependencies": {
-    "codemirror": "^5.40.0",
-    "highlight.js": "^9.12.0",
-    "marked": "^0.5.0"
-  }
+  "browserslist": [
+    "last 2 versions"
+  ]
 }

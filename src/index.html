@@ -18,10 +18,30 @@
       margin: 0 auto;
     }
   </style>
-</head>
+<link href="cMdEditor.css" rel="stylesheet"></head>
 <body>
   <div class="wrap">
-    <div class="cool-md-editor-wrap editor-theme-light" id="editor-wrap"></div>
+    <div class="cool-md-editor-wrap editor-theme-dark" id="editor-wrap"></div>
   </div>
+
+<!-- qiniu h5 upload -->
+<script src="https://unpkg.com/qiniu-js@2.5.5/dist/qiniu.min.js"></script>
+<script type="text/javascript" src="cMdEditor.js"></script>
+<script>
+  const cMdEditor = new CMdEditor({
+    el: document.getElementById('editor-wrap'),
+    // lang: 'zh',
+    // shortcuts: {
+    //   isOpen: false,
+    // },
+    qiniu: {
+      tokenApiUrl: 'http://121.42.230.245:9001/api/qiniu/test/get_token',
+    //   region: 'z1',
+    //   config: {},
+    //   putExtra: {}
+    }
+  });
+  console.log(cMdEditor);
+</script>
 </body>
 </html>

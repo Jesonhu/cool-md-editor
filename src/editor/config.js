@@ -1,5 +1,6 @@
 import lang from './lang/en';
 
+/** ========== 编辑器默认配置格式 ==========  */
 const config = {
   baseUrl: 'https://www.github.com',
   /** 阿里图标连接 */
@@ -32,6 +33,17 @@ const config = {
       }
     },
     language: lang
+  },
+  shortcuts: {
+    isOpen: false,
+  },
+  
+  // ===== qiniu =====
+  qiniu: {
+    tokenApiUrl: 'http://127.0.0.1:3001/api/qiniu/blog/get_token',
+    region: 'z1',
+    config: {},
+    putExtra: {}
   }
 }
 

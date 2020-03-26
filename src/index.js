@@ -1,21 +1,34 @@
-
+// 封装
 import domRender from './editor/createElement';
 import CONFIG from './editor/config';
+import codemirorTools from './editor/codemirror';
+const { getState } = codemirorTools;
+
+import { debounce } from 'lodash-es';
+const INPUT_EVENT_DEBOUNCE_WAIT = 300;
 
 // 工具图标功能
-import './style/index.scss';
+import './style/index.less';
 
 import $tools from './editor/toolbarHandle';
 
 /** 工具集合对象.  */
 import UTIL from './util/Util';
 
-// codemirror =========================
+// ==================== 编辑器语言 ====================
+import langEn from './editor/lang/en';
+import langZh from './editor/lang/zh';
+
+const langMap = {
+  'en': langEn,
+  'zh': langZh
+}
+
+// ==================== codemirror ====================
 import Codemirror from 'codemirror';
 import 'codemirror/mode/markdown/markdown';
 import 'codemirror/mode/gfm/gfm';
 import 'codemirror/mode/javascript/javascript';
-
 import 'codemirror/addon/mode/overlay';
 import 'codemirror/addon/edit/closetag';
 import 'codemirror/addon/edit/continuelist';
@@ -30,21 +43,16 @@ import 'codemirror/addon/fold/comment-fold';
 import 'codemirror/addon/fold/indent-fold';
 import 'codemirror/addon/fold/brace-fold';
 import 'codemirror/addon/fold/markdown-fold';
-
-
 import 'codemirror/lib/codemirror.css';
 // import 'codemirror/theme/base16-light.css'
 import 'codemirror/addon/fold/foldgutter.css';
-// codemirror =========================
 
-// marked =========================
+// ==================== marked ====================
 import marked from 'marked';
-// marked =========================
 
-// highlight.js =========================
+// ==================== highlight.js ====================
 import hljs from 'highlight.js';
 import 'highlight.js/styles/monokai-sublime.css';
-// highlight.js =========================
 
 // @see [config-see])[https://github.com/hackmdio/codimd/blob/master/public/js/lib/editor/index.js]
 
@@ -80,16 +88,16 @@ const codemirror = {
   }
 }
 
+// ==================== 七牛上传 ====================
+import QiniuUplaod from './editor/qiniu-sdk-upload';
+let qiniuUpload = null;
 
-class CoolMDEditor {
+
+class CMdEditor {
+
   constructor(options = {}) {
-
     options.editor = this;
-
     this.init(options);
-
-    // Auto render
-    // this.render();
   }
 
   /**
@@ -98,16 +106,19 @@ class CoolMDEditor {
   init(options) {
     this.initData(options)
       .then(() => {
-        this.initView(options);
+        this.initView(this._options);
       });
   }
+
   // 设置 config
   set options(option) {
     // 同值对象值覆盖
   }
+
   get options() {
     return this._options;
   }
+
   /**
    * 初始化编辑器数据. 
    */
@@ -190,9 +201,11 @@ class CoolMDEditor {
     return new Promise((resolve, reject) => {
       this.initOption(options);
       this.initEditorStatus();
+      this.initQiniu(this._options.qiniu);
       resolve();
     }); 
   }
+
   /**
    * 初始编辑器化视图显示. 
    */
@@ -205,6 +218,7 @@ class CoolMDEditor {
         self.initCodeMirrorData();
         self.initMarkdownData();
         self.initDefaultContent();
+        self.lifecycleMounted();
       });
   }
 
@@ -215,12 +229,48 @@ class CoolMDEditor {
     this.initStatusEvent();
     this.initToolsEvent();
   }
+
   initOption(options) {
-    this._options = options;
+    // Todo: 参数拷贝和覆盖功能需要优化.
+    const defaultOptions = {
+      // ========== 快捷键 ==========
+      shortcuts: {
+        isOpen: true,
+      },
+      // ========== 语言 ==========
+      lang: 'zh',
+      // ========== 七牛 ==========
+      qiniu: {
+        tokenApiUrl: 'http://127.0.0.1:3001/api/qiniu/test/get_token',
+        region: 'z1',
+        config: {},
+        putExtra: {}
+      }
+    }
+    // Object.assign(defaultOptions, options);
+    // this._options = defaultOptions;
+    this._options = UTIL.extend({}, defaultOptions, options);
     this._options.$tools = $tools;
-    this._options.lang= CONFIG.editor.language;
+    const _options = this._options;
+    console.log(this._options);
+
+    // 默认语言处理.
+    if (typeof _options.lang === 'string') {
+      const langKey = _options.lang;
+      this._options.lang = langMap[langKey] || CONFIG.editor.language;
+    } else {
+      // 自己配置语言.
+      this._options.lang = Object.assign({}, CONFIG.editor.language, options.lang);
+    }
   }
-  // 创建编辑器元素 start ====================================
+
+  //  ==================== 编辑器生命周期 ====================
+  /** 编辑器所有都准备好了 */
+  lifecycleMounted() {
+    this.addEditContainerPaseImg();
+  }
+
+  // ==================== 创建编辑器元素 ====================
   /**
    * 编辑器 `图标css链接` 元素创建.
    */
@@ -243,6 +293,7 @@ class CoolMDEditor {
     const result = oLink ? true : false;
     return result;
   }
+
   /**
    * 创建编辑器 `显示容器`. 
    */
@@ -253,9 +304,9 @@ class CoolMDEditor {
       });
     });
   }
-  // 创建编辑器元素 end ====================================
+  
 
-  // 编辑器 `Tools` 相关 start ====================================
+  // ==================== 编辑器 `Tools` 相关 ====================
   /**
    * 图标添加点击事件监听. 
    */
@@ -268,6 +319,11 @@ class CoolMDEditor {
 
     if (toolsArr.length > 0) {
       toolsArr.forEach(item => {
+        // clasName 有多个类名时取第一个.
+        if (item['className'].indexOf(' ') > 0) {
+          item['className'] = item['className'].split(' ')[0];
+        }
+
         const className = '.' + item['className'];
         const callBack = item['action'];
         const isFunction = UTIL.isFunction(callBack);
@@ -275,6 +331,8 @@ class CoolMDEditor {
         if (className !== '' && isFunction) {
           const toolEl = editorEl.querySelector('.editor-tools').querySelector(className);
           if (toolEl) {
+            // 默认显示 compare 布局
+            self.$status
             toolEl.$editor = self;
             // @see https://developer.mozilla.org/zh-CN/docs/Web/API/EventTarget/addEventListener
             toolEl.addEventListener('click', callBack, false);
@@ -283,15 +341,15 @@ class CoolMDEditor {
       });
     }
   }
-  // 编辑器 `Tools` 相关 end ====================================
 
-  // 编辑器 `CodeMirror` 相关 start ====================================
+  // ==================== 编辑器 `CodeMirror` 相关 ====================
   /**
    * 创建 Codemirror 容器. 
    */
   createCodeMirrorElement(el, config) {
     return Codemirror.fromTextArea(el, config);
   }
+  
   initCodeMirrorData() {
     const options = this._options;
     let mode;
@@ -361,38 +419,44 @@ class CoolMDEditor {
     // this.$codemirror = Codemirror.fromTextArea(textAreaElement, cmDiyConfig);
     this.$codemirror = this.createCodeMirrorElement(textAreaElement, cmDiyConfig);
     
-    // 没有使用箭头函数，通过这种方式获取 `编辑器对象`
+    // codemirror 添加访问编辑器快捷方式
     this.$codemirror.$editor = this;
 
     this.initCodeMirrorEvent();
   }
+
   initCodeMirrorEvent() {
     this.add_CM_change_eventHandle();
     this.add_CM_cursorActivity_eventHandle();
     this.addScrollSync();
   }
+
   /**
    * `CodeMirror` 内容变化事件监听.
    */
   add_CM_change_eventHandle() {
-    this.$codemirror.on('changes', this.onCodeMirrorChange);
+    this.$codemirror.on('changes', debounce(this.onCodeMirrorChange, INPUT_EVENT_DEBOUNCE_WAIT));
   }
+
   onCodeMirrorChange(cm) {
     // 编辑器实例.
     const editor = cm.$editor;
     editor.commonCodeMirrorEventHandle(cm);
   }
+
   /**
    * `CodeMirror` 光标移动事件监听.
    */
   add_CM_cursorActivity_eventHandle() {
     this.$codemirror.on('cursorActivity', this.onCodeMirrorCursorActivity);
   }
+
   onCodeMirrorCursorActivity(cm) {
     // 编辑器实例.
     const editor = cm.$editor;
     editor.commonCodeMirrorEventHandle(cm);
   }
+
   /**
    * `CodeMirror` 事件回调中都需要处理的内容. 
    * 
@@ -404,9 +468,9 @@ class CoolMDEditor {
     editor.setHtmlValue(content);
     editor.updateStatusBar(editor);
   }
-  // 编辑器 `CodeMirror` 相关 end ====================================
+  
 
-  // 编辑器 `markdown` 相关 start ====================================
+  // ==================== 编辑器 `markdown` 相关 ====================
   initMarkdownData(text) {
     if (marked) {
       const markedOptions = {
@@ -426,8 +490,10 @@ class CoolMDEditor {
       this.$marked.setOptions(markedOptions);
     }
   }
+
   initMarkdownEvent() {
   }
+
   /**
    * Markdown 内容显示设置.
    */
@@ -439,6 +505,7 @@ class CoolMDEditor {
       this.commonCodeMirrorEventHandle(cm);
     }
   }
+
   /** 
    * 获取 `CodeMirror` 的值.
    */
@@ -446,6 +513,7 @@ class CoolMDEditor {
     const cm = this.$codemirror;
     return cm.getValue();
   }
+
   /**
    * 设置 `CodeMirror` 的值. 
    */
@@ -454,11 +522,10 @@ class CoolMDEditor {
     const htmlElement = this._options.el.querySelector('.editor-preview').querySelector('.preview-bd');
     htmlElement.innerHTML = htmlStr;
   }
-  // 编辑器 `markdown` 相关 end ====================================
 
-  // 编辑器 `preview` 容器相关 start ====================================
-  // 编辑器 `preview` 容器相关 end ====================================
+  // ==================== 编辑器 `preview` 容器相关 ====================
 
+  // ==================== 编辑器 `滚动条` ====================
   /**
    * 滚动内容同步. 
    */
@@ -495,7 +562,7 @@ class CoolMDEditor {
     });
   }
 
-  // 编辑器 `status` 容器相关 end ====================================
+  // ==================== 编辑器 `status` 相关 ====================
   updateStatusBar() {
     const cm = this.$codemirror;
 
@@ -503,6 +570,7 @@ class CoolMDEditor {
     this.renderEditorContentPosition();
     this.renderEditContentLength(conLen);
   }
+
   /**
    * 显示输入内容总长度.
    * 
@@ -516,6 +584,7 @@ class CoolMDEditor {
 
     lenElement.innerHTML = `${length} ${len}`;
   }
+
   /**
    * 显示当前光标所在的 `行数`、`列数`. `总列数`、`总长度`.
    */
@@ -534,24 +603,26 @@ class CoolMDEditor {
     const statusBarEl = editorEl.querySelector('.editor-status').querySelector('.editor-status-positon').querySelector('span');
     statusBarEl.innerHTML = `${line} ${currLine},${columns} ${currCol} 一 ${lineCount} ${line}`;
   }
-  // 编辑器 `status` 容器相关 end ====================================
-
-  // 编辑器初始状态设置 start ====================================
+  
   initEditorStatus(options) {
     // 主题设置.
     this.$status = {};
     this.$status['isThemeLight'] = true;
     this.$status['isFullscreen'] = false;
+    /** 默认显示编辑布局 */
+    this.$status['isShowAll'] = true;
+    this.$status['isOnlyPreview'] = false;
+    this.$status['isOnlyEdit'] = false;
   }
-  // 编辑器初始状态设置 end ====================================
 
-  // 编辑器事件处理 start ====================================
+  // ==================== 编辑器事件处理 ====================
   /**
    * 状态条，换皮肤. 
    */
   initStatusEvent() {
     this.initEventToggleTheme();
   }
+
   /**
    * 换肤功能添加. 
    */
@@ -577,10 +648,94 @@ class CoolMDEditor {
       });
     }
   }
+
   initEventToggleFullscreen(options) {
   }
-  // 编辑器事件处理 end ====================================
 
+  // ==================== 编辑器扩展功能 ====================
+  // 粘贴图片，并上传至七牛云
+  // =======================================================
+  initQiniu(options = {}) {
+    qiniuUpload = new QiniuUplaod(options)
+  }
+
+  /** 编辑器内容，粘贴图片处理功能 */
+  addEditContainerPaseImg() {
+    const oEl = this._options.el.querySelector('.editor-md');
+    const cm = this.$codemirror;
+
+    oEl.addEventListener('paste', function(event) {
+      if (event.clipboardData || event.originalEvent) {
+        var clipboardData = (event.clipboardData || event.originalEvent.clipboardData);
+        if(clipboardData.items){
+            var  blob;
+            for (var i = 0; i < clipboardData.items.length; i++) {
+                if (clipboardData.items[i].type.indexOf("image") !== -1) {
+                    blob = clipboardData.items[i].getAsFile();
+                }
+            }
+            // 只处理粘贴的类型为图片.
+            if (!blob) return;
+
+            var render = new FileReader();
+            render.onload = function (evt) {
+                handleImageUpload(evt.target);
+            }
+            render.readAsDataURL(blob);
+        }
+
+      }
+    });
+
+    /** 图片上传处理 */
+    const handleImageUpload = (target) => {
+      // 编辑器中插入内容
+      const insertTexts = ["![](", "#url#)"];
+      const stat = getState(cm);
+      // base64编码
+      const imgUrl = target.result;
+      // console.log('粘贴图片处理', target);
+      qiniuUpload.putb64(imgUrl)
+        .then(res => {
+          const url = res.domain + '/' + res.hash;
+          _replaceSelection(cm, stat.image, insertTexts, url);
+        })
+        .catch(err => {
+          console.log(err);
+        });
+    }
+
+    const _replaceSelection = (cm, active, startEnd, url) => {
+      var text;
+      var start = startEnd[0];
+      var end = startEnd[1];
+      var startPoint = cm.getCursor("start");
+      var endPoint = cm.getCursor("end");
+      // if(url) {
+      //   end = end.replace("#url#", url);
+      // }
+      end = end.replace("#url#", url);
+      if(active) {
+        text = cm.getLine(startPoint.line);
+        start = text.slice(0, startPoint.ch);
+        end = text.slice(startPoint.ch);
+        cm.replaceRange(start + end, {
+          line: startPoint.line,
+          ch: 0
+        });
+      } else {
+        text = cm.getSelection();
+        cm.replaceSelection(start + text + end);
+    
+        startPoint.ch += start.length;
+        if(startPoint !== endPoint) {
+          endPoint.ch += start.length;
+        }
+      }
+      cm.setSelection(startPoint, endPoint);
+      cm.focus();
+    }
+  }
   /**
    * Render editor to the given element.
    * @param {Element} el 
@@ -622,18 +777,17 @@ class CoolMDEditor {
   }
 }
 
-// export default CoolMDEditor;
 
-// 模块导出
+// ==================== umd 模块导出 ====================
 if (typeof define === 'function' && typeof define.amd === 'object' && define.amd) {
   // AMD. Register as an anonymous module.
   define(function() {
-    return CoolMDEditor;
+    return CMdEditor;
   });
 } else if (typeof module !== 'undefined' && module.exports) {
-  module.exports = CoolMDEditor;
+  module.exports = CMdEditor;
 } else {
-  window.CoolMDEditor = CoolMDEditor;
+  window.CMdEditor = CMdEditor;
 }
 
 

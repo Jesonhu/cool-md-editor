@@ -3,6 +3,8 @@ const { shortcuts, fixShortcut } = TOOLS;
 
 const domRender = {
   init(options) {
+    // console.log('domRender options: %o', options);
+    // console.log('domRender this: %o', this);
     this.initData(options);
     return new Promise((resolve, reject) => {
       this.renderTools(options)
@@ -27,9 +29,12 @@ const domRender = {
     // await this.renderPriview(parent);
     // await this.renderStatus(parent);
   },
+
   initData(options) {
-    this.lang = options.lang;
+    this.$editor = {};
+    this.$editor.options = options;
   },
+
   // 创建 Edit Tools start =========================
   renderTools(options) {
     const el = options.el;
@@ -43,6 +48,7 @@ const domRender = {
       resolve();
     });
   },
+  
   /**
    * 创建工具条 `编辑工具图标`. 
    */
@@ -162,8 +168,26 @@ const domRender = {
       currPlatShortcutsItem = '';
     }
 
-    return `<span class="${config.className}" title="${config.title} (${currPlatShortcutsItem})" data-name="${config.name}"></span>`;
+    const itemTitle = this.getToolItemTitleText(config.name);
+
+    // 开启了快捷键提示.
+    if (this.$editor.options.fixShortcut && this.$editor.options.fixShortcut.isOpen) {
+      return `<span class="${config.className}" title="${itemTitle} (${currPlatShortcutsItem})" data-name="${config.name}"></span>`;
+    } else {
+      return `<span class="${config.className}" title="${itemTitle}" data-name="${config.name}"></span>`;
+    }
   },
+
+  /** 
+   * 获取菜单按钮的 title 文字. 
+   * 根据编辑器的语言返回对应的内容.
+   */
+  getToolItemTitleText(itemName) {
+    const useLangItem = this.$editor.options.lang.toolbarItem;
+    const key = itemName.toLowerCase();
+    return useLangItem[key];
+  },
+
   // 创建 Edit Tools end =========================
 
   // 创建 Edit 编辑容器 start =========================
@@ -212,7 +236,7 @@ const domRender = {
   },
   createStatusPosition(options) {
     const toggleThemeHtmlStr = this.createStatusToggleTheme();
-    const language = this.lang;
+    const language = this.$editor.options.lang;
     const { line,  columns } = language.statusBar;
     let htmlStr = `<div class="editor-status-positon"><span>${line} ,${columns}  一  ${line}</span>${toggleThemeHtmlStr}</div>`;
 
@@ -224,7 +248,7 @@ const domRender = {
     return htmlStr;
   },
   createStatusLens() {
-    const language = this.lang;
+    const language = this.$editor.options.lang;
     const { length } = language.statusBar;
     let htmlStr = `<div class="editor-status-length">${length}</div>`;
 

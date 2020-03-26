@@ -1,0 +1,67 @@
+//========================================
+// 编辑器 `预览容器` 样式.
+//
+// @update 2019/1/18
+// @author Jesonhu(github)
+// @email jesonhu_web@163.com
+//========================================
+
+// 公共样式
+.cool-md-editor-wrap {
+  .editor-preview {
+    padding-left:5px;
+    height: 100%;
+    overflow: hidden;
+    overflow-y: scroll;
+    &.hide {
+      display: none;
+    }
+
+    // 个性化样式 start
+    .markdown-body {
+      min-height: 100%;
+      border:none;
+      h1, h2, h3, h4, h5, h6,
+      p,
+      ul, li {
+        & > code {
+          background-color: #F9F2F4;
+          color: #D02572;
+        }
+      }
+
+      a {
+        color: #0269c8;
+        border-bottom: 1px solid #d1e9ff;
+      }
+
+      pre {
+        border: solid 1px #dce6f0;
+        border-radius: .3rem;
+        background-color:#eee;
+      }
+
+      img {
+        max-width: 100%;
+        box-shadow: none;
+      }
+    }
+    // 个性化样式 end
+  }
+}
+
+// `圣光主题`
+.editor-theme-light {
+  .editor-preview {
+    .preview-bd {
+      background-color:#fff;
+    }
+  }
+}
+
+// `暗黑主题`
+.editor-theme-dark {
+  .editor-preview {
+    background-color:#fff;
+  }
+}

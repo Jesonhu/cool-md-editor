@@ -18,16 +18,17 @@
       margin: 0 auto;
     }
   </style>
-<link href="coolMdEditor.css" rel="stylesheet"></head>
+<link href="cMdEditor.css" rel="stylesheet"></head>
 <body>
   <div class="wrap">
     <div class="cool-md-editor-wrap editor-theme-light" id="editor-wrap"></div>
   </div>
-<script type="text/javascript" src="coolMdEditor.js"></script>
+<script type="text/javascript" src="cMdEditor.js"></script>
 <script>
-  new CoolMDEditor({
+  const cMdEditor = new CMdEditor({
     el: document.getElementById('editor-wrap')
-  })
+  });
+  console.log(cMdEditor);
 </script>
 </body>
 </html>
