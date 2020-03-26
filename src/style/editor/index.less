@@ -1,8 +1,8 @@
 // element
-@import './element/tools.scss';
-@import './element/md.scss';
-@import './element/preview.scss';
-@import './element/status.scss';
+@import './element/tools.less';
+@import './element/md.less';
+@import './element/preview.less';
+@import './element/status.less';
 
 .cool-md-editor-wrap {
   display:flex;
@@ -67,13 +67,13 @@
   /* 主题 start */
   // `圣光` 主题
   &.editor-theme-light {
-    border-left-color:$themeLight;
-    border-right-color:$themeLight;
+    border-left-color:@themeLight;
+    border-right-color:@themeLight;
   }
   // `暗黑` 主题
   &.editor-theme-dark {
-    border-left-color:$themeDark;
-    border-right-color:$themeDark;
+    border-left-color:@themeDark;
+    border-right-color:@themeDark;
   }
   /* 主题 end */
 }

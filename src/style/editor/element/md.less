@@ -7,8 +7,8 @@
 //========================================
 
 // theme
-@import '../theme/base16-dark.scss';
-@import '../theme/base16-light.scss';
+@import '../theme/base16-dark.less';
+@import '../theme/base16-light.less';
 
 // 公共样式
 .cool-md-editor-wrap {
@@ -30,13 +30,13 @@
 // `圣光主题`
 .editor-theme-light {
   .editor-md {
-    background-color:$themeLight;
+    background-color:@themeLight;
   }
 }
 
 // `暗黑主题`
 .editor-theme-dark {
   .editor-md {
-    background-color:$themeLight;
+    background-color:@themeLight;
   }
 }

@@ -61,26 +61,26 @@
 // `圣光主题`
 .editor-theme-light {
   .editor-tools {
-    background-color:$themeLight;
+    background-color:@themeLight;
 
     /* 编辑器图标样式 start */
     .editor-tools-main > *,
     .editor-tools-handle > * {
-      color:  darken($themeLight, 70);
+      color:  darken(@themeLight, 70);
       &.active {
-        border-color: darken($themeLight, 70);
+        border-color: darken(@themeLight, 70);
       }
     }
     .editor-tools-main {
       span[data-name="undo"],
       span[data-name="redo"] {
-        color: lighten($themeLight, 10);
+        color: lighten(@themeLight, 10);
         &.canActive {
-          color: darken($themeLight, 70);
+          color: darken(@themeLight, 70);
         }
       }
       .editor-tools-division {
-        color: darken($themeLight, 30);
+        color: darken(@themeLight, 30);
       }
     }
     /* 编辑器图标样式 end */
@@ -90,26 +90,26 @@
 // `暗黑主题`
 .editor-theme-dark {
   .editor-tools {
-    background-color:$themeDark;
+    background-color:@themeDark;
 
     /* 编辑器图标样式 start */
     .editor-tools-main > *,
     .editor-tools-handle > * {
-      color: lighten($themeDark, 70);
+      color: lighten(@themeDark, 70);
       &.active {
-        border-color: lighten($themeDark, 70);
+        border-color: lighten(@themeDark, 70);
       }
     }
     .editor-tools-main {
       span[data-name="undo"],
       span[data-name="redo"] {
-        color: lighten($themeDark, 10);
+        color: lighten(@themeDark, 10);
         &.canActive {
-          color: lighten($themeDark, 70);
+          color: lighten(@themeDark, 70);
         }
       }
       .editor-tools-division {
-        color: lighten($themeDark, 30);
+        color: lighten(@themeDark, 30);
       }
     }
     /* 编辑器图标样式 end */

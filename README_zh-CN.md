@@ -8,8 +8,8 @@
 # 安装依赖
 npm install
 
-# development: 开启 devServer 带有热更新的开发环境
-npm run devServer
+# development: 开启带有热更新的开发环境
+npm run dev
 
 # product: 输出内容(生成 dist目录)
 npm run build
@@ -17,12 +17,14 @@ npm run build
 
 ### 使用方式
 
-Tips: 通过 `webpack` 导出为 `umd` 类型的文件。故支持以下几种方式.
+Tips: 导出为 `umd` 类型的文件。支持以下几种使用方式.
 
 #### 方式1 script 标签使用
+
 CDN:
 + CSS: https://unpkg.com/cool-md-editor@版本号/dist/coolMdEditor.css
 + JS: https://unpkg.com/cool-md-editor@版本号/dist/coolMdEditor.js
+
 ```html
 <head>
   ...
@@ -117,6 +119,9 @@ const coolMDEditor = new CoolMDEditor({
 |--|--|--|:--:|:--:|
 | `isFullscreen` | Boolean | 是否全屏显示, 全屏为 `true` | `false` 或者本地存储设置值| - |
 | `isThemeLight` | Boolean | 是否主题为`圣光`, 目前只有 `圣光` 和 `暗黑` 主题 ，根据 `base16` 扩展而来。未来也只考虑两套主题(光/暗) | true 或者本地存储设置值| - |
+| `isShowAll` | Boolean |编辑和预览都显示, 与 `isOnlyEdit` `isOnlyPreview`为正反关系 |true | - |
+| `isOnlyPreview` | Boolean |只显示预览 |false | - |
+| `isOnlyEdit` | Boolean | 只显示编辑|true | - |
 
 #### `_options` 属性
 
@@ -124,10 +129,15 @@ const coolMDEditor = new CoolMDEditor({
 |--|--|--|:--:|:--:|
 | `el` | HTMLElement | 编辑器 `dom` 元素| - | - |
 | `$tools` | Object | 工具条类名(图标)、title、和绑定的事件等| - | - |
-| `lang` | Object | 编辑器的语言内容 | 中文语言(zh) | - |
+| `lang` | Object/String | 编辑器的语言内容 | - | - |
 | `editor` | Object | 编辑器实例对象 | - | - |
+|`shortcuts`| Object | 快捷键配置 | - | -|
+|`qiniu`| Object | 七牛云配置，图片复制粘贴后上传到七牛云 | - | -|
 
-**TIPS: $tools 结构像下面这样**
+
+
++ $tools 结构
+
 ```js
 {
   name: 'heading',             // 名称
@@ -140,7 +150,43 @@ const coolMDEditor = new CoolMDEditor({
 }
 ```
 
++ lang
+
+类型-字符串: 使用内置的语言，目前内置了 `en: englisth` `zh: 简体中文`, 具体配置可查看 `lang/*` 目录中的配置。
+
+类型-对象: 可以扩展第三方语言，具体配置格式可查看 `lang/*` 目录文件。
+
++ qiniu
+
+需要使用粘贴图片功能，要先引用 `https://unpkg.com/qiniu-js@<版本号>/dist/qiniu.min.js`。粘贴的图片转换为了 base64 格式，为了避免图片路径显示 base64 格式的字符串，造成内容过多问题。编辑器内置了将 base64 格式的图片上传至七牛云存储的功能。
+
+默认配置为
+```js
+qiniu: {
+    tokenApiUrl: 'http://127.0.0.1:3001/api/qiniu/blog/get_token',
+    region: 'z1',
+    config: {},
+    putExtra: {}
+}
+```
+
+关于内置的七牛上传需要注意以下几点:
+
++ token 的获取编辑器内置了接口处理，可以不用设置，如果需要使用自己的接口服务器需要配置 
+`qiniu.tokenApiUrl`, 并且返回如下数据格式 
+
+```json
+{
+  data: {
+   token: 'your token',
+   domain: 'your 七牛云后台设置的自己的域名'
+  }
+}
+```
++ 上传的空间为测试空间，内容会不定时删除，所以请配置自己的七牛云上传空间
+
 #### 编辑器实例对象方法
+
 |方法名|说明|参数|返回值|
 |--|--|--|:--:|
 |getMDValue|获取当前Markdown的内容|-|当前Markdown的内容|
@@ -154,3 +200,4 @@ const coolMDEditor = new CoolMDEditor({
   + [surmon-china/angular-admin](https://github.com/surmon-china/angular-admin/blob/89ad805a7932c4e06560127bf8820640fc079584/src/app/components/saMarkdownEditor/markdownEditor.component.ts)
   + [codimd](https://demo.codimd.org/features?both)
   + [md.editor](https://github.com/TeoChoi/md.editor)
+ 
