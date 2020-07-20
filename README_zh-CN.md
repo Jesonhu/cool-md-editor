@@ -31,13 +31,13 @@ CDN:
 ```html
 <head>
   ...
-  <link href="cMdEditor.css" rel="stylesheet">
+  <link href="https://unpkg.com/cool-md-editor@<版本号>/dist/cMdEditor.css" rel="stylesheet">
 </head>
 <body>
   <div class="cool-md-editor-wrap editor-theme-light" id="editor-wrap1"></div>
   <div class="cool-md-editor-wrap editor-theme-dark" id="editor-wrap2"></div>
 
-  <script src="cMdEditor.js"></script>
+  <script src="https://unpkg.com/cool-md-editor@<版本号>/dist/cMdEditor.js"></script>
   <script>
     const mdEditor1 = new CMdEditor.default({
       el: document.getElementById('editor-wrap1'),
